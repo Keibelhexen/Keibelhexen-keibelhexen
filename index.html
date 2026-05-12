@@ -10,19 +10,17 @@
   --ink:#06090f;--ink2:#0c1220;--ink3:#111d30;
   --b:#1a4a8a;--b2:#2563eb;--b3:#60a5fa;--b4:#bfdbfe;
   --w:#f0f6ff;--g:#64748b;--dim:#1e3358;
-  --pad:clamp(1.5rem,5vw,4rem);
-  --max:1200px
+  --pad:clamp(1.5rem,5vw,4rem);--max:1200px
 }
 html{scroll-behavior:smooth}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--ink);color:var(--w);overflow-x:hidden}
-
-/* KONFETTI */
 #confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--b2),var(--b3));z-index:200;width:0%}
+#loader{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:var(--b);color:#fff;padding:.45rem 1.1rem;border-radius:20px;font-size:.76rem;font-weight:700;z-index:250;display:none;align-items:center;gap:.55rem;white-space:nowrap}
+.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* PROGRESS */
-#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--b2),var(--b3));z-index:200;width:0%;transition:width .1s}
-
-/* ── NAV ── */
+/* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);border-bottom:1px solid transparent;transition:background .4s}
 nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(--dim)}
 .nl{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--w)}
@@ -32,17 +30,15 @@ nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(-
 .nm{list-style:none;display:flex;gap:.1rem}
 .nm a{color:rgba(240,246,255,.55);text-decoration:none;padding:.4rem .7rem;font-size:.8rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;transition:color .2s;border-radius:4px}
 .nm a:hover{color:var(--w);background:rgba(255,255,255,.05)}
-/* Hamburger */
 .hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none}
 .hbg span{display:block;width:22px;height:2px;background:var(--w);border-radius:2px;transition:all .3s}
 .hbg.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
 .hbg.open span:nth-child(2){opacity:0}
 .hbg.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
-/* Mobile menu */
 .nm.open{display:flex!important;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:rgba(6,9,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dim);padding:1rem;gap:.2rem;z-index:99}
 .nm.open a{padding:.75rem 1rem;border-radius:6px;font-size:.9rem}
 
-/* ── HERO ── */
+/* HERO */
 #home{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding-top:60px}
 .hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.07) 1px,transparent 1px);background-size:50px 50px;animation:gmove 20s linear infinite}
 @keyframes gmove{to{background-position:50px 50px}}
@@ -66,12 +62,12 @@ nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(-
 .scrarr{width:1px;height:36px;background:linear-gradient(to bottom,var(--b2),transparent);animation:sp 2s ease-in-out infinite}
 @keyframes sp{0%,100%{opacity:.3;transform:scaleY(.5);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
 
-/* ── BUTTONS ── */
+/* BUTTONS */
 .btn{padding:.7rem 1.8rem;border-radius:6px;font-weight:700;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .25s;font-family:inherit;cursor:pointer;white-space:nowrap}
 .bp{background:var(--b2);color:#fff}.bp:hover{background:#1d4ed8;transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,.4)}
 .bo{background:transparent;color:var(--w);border:1px solid rgba(255,255,255,.25)}.bo:hover{border-color:var(--b3);color:var(--b3);transform:translateY(-2px)}
 
-/* ── SECTION BASE ── */
+/* SECTIONS */
 .si{max-width:var(--max);margin:0 auto;padding:6rem var(--pad)}
 .sn{font-size:clamp(4rem,10vw,10rem);font-weight:900;color:rgba(255,255,255,.03);line-height:1;letter-spacing:-.05em;margin-bottom:-1.5rem;user-select:none}
 .st{font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--b3);margin-bottom:.6rem}
@@ -80,7 +76,7 @@ nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(-
 .rv{opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s}
 .rv.on{opacity:1;transform:none}
 
-/* ── ÜBER UNS ── */
+/* ÜBER UNS */
 #uu{background:var(--ink2)}
 .aug{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
 .aup p{color:var(--g);line-height:1.85;font-size:.97rem;margin-bottom:1rem}
@@ -90,16 +86,14 @@ nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(-
 .auimg{position:relative;aspect-ratio:4/5;background:var(--ink3);border:1px solid var(--dim);overflow:hidden;border-radius:8px}
 .auimg img{width:100%;height:100%;object-fit:cover;display:none}
 .auiph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--g);font-size:.8rem}
-.auiov{position:absolute;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-direction:column;gap:.4rem;cursor:pointer;border-radius:8px}
-.admin-mode .auiov{display:flex}
 .cc{position:absolute;bottom:0;right:0;width:60px;height:60px;background-image:repeating-conic-gradient(var(--b) 0% 25%,transparent 0% 50%);background-size:12px 12px;opacity:.4}
 
-/* ── TERMINE ── */
+/* TERMINE */
 #tr{background:var(--ink)}
 .calf{border-radius:12px;overflow:hidden;border:1px solid var(--dim)}
 .calf iframe{width:100%;height:clamp(400px,60vh,580px);border:none;display:block;filter:invert(1) hue-rotate(190deg) saturate(.8) brightness(.9)}
 
-/* ── GALERIE ── */
+/* GALERIE */
 #ga{background:var(--ink2);overflow:hidden}
 .gastrip{display:flex;gap:1.2rem;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;padding-bottom:.5rem}
 .gastrip::-webkit-scrollbar{display:none}
@@ -109,23 +103,20 @@ nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(-
 .gi img{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform .5s}
 .gi:hover img{transform:scale(1.04)}
 .giph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--g);font-size:.8rem}
-.garmbtn{display:none;position:absolute;top:8px;right:8px;background:#ef4444;color:#fff;border:none;width:28px;height:28px;border-radius:50%;font-size:.9rem;cursor:pointer;align-items:center;justify-content:center;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.admin-mode .garmbtn{display:flex}
 .ga-hint{color:var(--g);font-size:.8rem;letter-spacing:.05em;margin-top:.75rem}
 
-/* ── VERANSTALTUNGEN ── */
+/* VERANSTALTUNGEN */
 #ve{background:var(--ink)}
 .ycard{border:1px solid var(--dim);background:var(--ink3);border-radius:8px;margin-bottom:.8rem;overflow:hidden;transition:border-color .3s}
 .ycard.open{border-color:var(--b2)}
 .yhead{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;cursor:pointer;user-select:none;transition:background .2s;gap:1rem}
 .yhead:hover{background:rgba(37,99,235,.08)}
 .ytit{font-size:1.3rem;font-weight:900;letter-spacing:-.02em}
-.ymeta{display:flex;align-items:center;gap:.8rem;flex-shrink:0}
 .yarr{color:var(--b3);transition:transform .3s;font-size:.9rem}
 .ycard.open .yarr{transform:rotate(180deg)}
 .ybody{display:none;padding:1.2rem 1.4rem;border-top:1px solid var(--dim)}
 .ycard.open .ybody{display:block}
-.lcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.2rem;margin-bottom:1rem}
+.lcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.2rem}
 .lccard{background:var(--ink2);border:1px solid var(--dim);border-radius:8px;overflow:hidden;transition:border-color .3s}
 .lccard:hover{border-color:var(--b2)}
 .lcimgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(75px,1fr));gap:3px;background:var(--ink3);min-height:100px}
@@ -135,7 +126,7 @@ nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(-
 .lcinfo{padding:.85rem 1rem}
 .lcname{font-size:.9rem;font-weight:700}
 
-/* ── FLYER ── */
+/* FLYER */
 #fl{background:var(--ink2)}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(150px,40vw,200px),1fr));gap:1.2rem}
 .fc{background:var(--ink3);border:1px solid var(--dim);overflow:hidden;cursor:pointer;transition:transform .3s,border-color .3s;border-radius:8px}
@@ -148,10 +139,8 @@ nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(-
 .finfo{padding:.9rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
 .finfo h3{font-size:.82rem;font-weight:700;word-break:break-word;line-height:1.3}
 .ftype{font-size:.72rem;color:var(--b3);white-space:nowrap;flex-shrink:0}
-.frmbtn{display:none;position:absolute;top:8px;right:8px;background:#ef4444;color:#fff;border:none;width:26px;height:26px;border-radius:50%;font-size:.85rem;cursor:pointer;align-items:center;justify-content:center;z-index:5}
-.admin-mode .frmbtn{display:flex}
 
-/* ── KONTAKT ── */
+/* KONTAKT */
 #ko{background:var(--ink)}
 .kog{display:grid;grid-template-columns:1fr 1.3fr;gap:4rem;align-items:start}
 .koi{display:flex;align-items:center;gap:.9rem;margin-bottom:1.3rem;color:var(--g)}
@@ -165,7 +154,7 @@ nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(-
 .fg input:focus,.fg textarea:focus{border-color:var(--b2)}
 .fg textarea{min-height:110px;resize:vertical}
 
-/* ── FOOTER ── */
+/* FOOTER */
 footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var(--pad)}
 .foi{max-width:var(--max);margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:1.4rem}
 .fobig{font-size:clamp(2rem,6vw,4rem);font-weight:900;letter-spacing:-.03em;opacity:.05;text-transform:uppercase}
@@ -175,25 +164,8 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
 .soc a{width:40px;height:40px;border:1px solid var(--dim);border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1rem;transition:all .2s}
 .soc a:hover{border-color:var(--b2);background:rgba(37,99,235,.18)}
 .focopy{font-size:.78rem;color:var(--g)}
-.foadm{font-size:.6rem;color:var(--ink);cursor:default;user-select:none;transition:color .3s}
-.foadm:hover{color:var(--dim)}
 
-/* ── ADMIN BAR ── */
-.abar{position:fixed;bottom:0;left:0;right:0;background:rgba(8,16,40,.97);border-top:2px solid var(--b2);padding:.65rem var(--pad);display:none;align-items:center;justify-content:space-between;z-index:300;flex-wrap:wrap;gap:.5rem}
-.abar.on{display:flex}
-.abar>span{font-size:.8rem;font-weight:700;color:var(--b3)}
-.abts{display:flex;gap:.4rem;flex-wrap:wrap}
-.ab{padding:.38rem .9rem;font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border:none;font-family:inherit;transition:all .2s;border-radius:4px}
-.abp{background:var(--b3);color:#06090f}.abp:hover{background:var(--b4)}
-.abs{background:transparent;color:var(--w);border:1px solid rgba(255,255,255,.22)}.abs:hover{background:rgba(255,255,255,.08)}
-.abd{background:#ef4444;color:#fff}
-.editable{outline:none;transition:background .2s}
-.admin-mode .editable{background:rgba(37,99,235,.08);outline:1px dashed rgba(96,165,250,.35);padding:0 2px;border-radius:2px}
-.admin-mode .editable:focus{background:rgba(37,99,235,.15);outline:1px solid var(--b2)}
-.dh{background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.3);border-radius:6px;padding:.7rem 1rem;color:var(--b4);font-size:.8rem;margin-bottom:1.2rem;display:none}
-.admin-mode .dh{display:block}
-
-/* ── LIGHTBOX ── */
+/* LIGHTBOX */
 .lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:400;flex-direction:column;align-items:center;justify-content:center}
 .lb.on{display:flex}
 .lbx{position:absolute;top:1rem;right:1.2rem;color:#fff;font-size:1.6rem;cursor:pointer;background:rgba(255,255,255,.1);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .2s}
@@ -212,17 +184,11 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
 .lbdots{display:flex;gap:.5rem;justify-content:center;padding:.6rem 0;flex-shrink:0}
 .lbdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.28);cursor:pointer;transition:background .2s}
 .lbdot.on{background:var(--b3)}
+.toast{position:fixed;bottom:1.5rem;right:1.2rem;background:var(--b);color:#fff;padding:.55rem 1.1rem;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;z-index:999;border-radius:6px;box-shadow:0 4px 20px rgba(0,0,0,.5);animation:fup .3s ease;pointer-events:none}
 
-/* ── TOAST + LOADER ── */
-.toast{position:fixed;bottom:72px;right:1.2rem;background:var(--b);color:#fff;padding:.55rem 1.1rem;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;z-index:999;border-radius:6px;box-shadow:0 4px 20px rgba(0,0,0,.5);animation:fup .3s ease;pointer-events:none}
-#loader{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:var(--b);color:#fff;padding:.45rem 1.1rem;border-radius:20px;font-size:.76rem;font-weight:700;z-index:250;display:none;align-items:center;gap:.55rem;white-space:nowrap}
-.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── MOBILE ── */
+/* RESPONSIVE */
 @media(max-width:768px){
-  .nm{display:none}
-  .hbg{display:flex}
+  .nm{display:none}.hbg{display:flex}
   .aug{grid-template-columns:1fr;gap:2rem}
   .aug .auimg{aspect-ratio:3/2;order:-1}
   .kog{grid-template-columns:1fr;gap:2rem}
@@ -236,17 +202,10 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
   .lbnav{display:none}
   .forow{flex-direction:column;align-items:center;text-align:center}
   #confetti{display:none}
-  .abar{padding:.6rem 1rem}
-  .ab{padding:.35rem .7rem;font-size:.7rem}
-  .lbslide{padding:1rem}
 }
 @media(max-width:480px){
   .fgrid{grid-template-columns:1fr}
-  .ytit{font-size:1.1rem}
-  .hae{padding:1rem}
 }
-
-/* ── DESKTOP ENHANCEMENTS ── */
 @media(min-width:1400px){
   :root{--pad:5rem}
   .gi{flex:0 0 360px;height:440px}
@@ -273,23 +232,20 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
     <li><a href="#fl">Flyer</a></li>
     <li><a href="#ko">Kontakt</a></li>
   </ul>
-  <button class="hbg" id="hbg" onclick="tmenu()" aria-label="Menü">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="hbg" id="hbg" onclick="tmenu()"><span></span><span></span><span></span></button>
 </nav>
 
 <!-- HERO -->
 <section id="home">
-  <div class="hgrid"></div>
-  <div class="hglow"></div>
-  <div class="hcheck"></div>
+  <div class="hgrid"></div><div class="hglow"></div><div class="hcheck"></div>
   <div class="hc">
     <div id="hlogo">
-      <div class="lph" id="hlph">🧙‍♀️<span style="font-size:.7rem;color:var(--g)">Logo im Admin</span></div>
+      <div class="lph" id="hlph">🧙‍♀️<span style="font-size:.7rem;color:var(--g)">Logo → images/logo/</span></div>
     </div>
     <p class="htag">✦ Pforzheim · Huchenfeld ✦</p>
     <h1 class="hbig"><span>KEIBEL</span><span>HEXEN</span></h1>
-    <p class="hsub editable" id="txt-motto">„Die schenschde Hexe' uff derre Welt, sen' d' Keibelhexe' aus Huchenfeld"</p>
+    <!-- MOTTO: Text hier direkt ändern -->
+    <p class="hsub">„Die schenschde Hexe' uff derre Welt, sen' d' Keibelhexe' aus Huchenfeld"</p>
     <div class="hbtns">
       <a href="#tr" class="btn bp">📅 Termine ansehen</a>
       <a href="#ga" class="btn bo">📸 Galerie</a>
@@ -307,19 +263,18 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
         <div class="st rv">Wer wir sind</div>
         <h2 class="sh rv">Über die<br>Keibelhexen</h2>
         <div class="sl rv"></div>
-        <div class="dh rv">📁 Bild → Drive-Ordner „Ueber-uns"</div>
-        <p class="editable rv" id="txt-a1">Die Huchefelder Keibelhexen sind eine traditionsreiche Hexengruppe aus dem Pforzheimer Stadtteil Huchenfeld. Jedes Jahr läuten wir am „Schmotzigen" Donnerstag die fünfte Jahreszeit ein und stürmen das Huchenfelder Rathaus.</p>
-        <p class="editable rv" id="txt-a2" style="margin-top:1rem">Nach dem Einmarsch der Hexen auf dem Rathausplatz übernehmen wir das Rathaus und entführen die Ortsvorsteherin. Bis Aschermittwoch haben die Narren die Rathausherrschaft inne.</p>
-        <p class="editable rv" id="txt-a3" style="margin-top:1rem">Wir sind stolz auf unsere Tradition und freuen uns über jeden, der mit uns feiert.</p>
-        <div class="hae rv" style="margin-top:1.5rem">
+        <!-- TEXTE: Direkt hier in der index.html auf GitHub ändern -->
+        <p class="rv" style="color:var(--g);line-height:1.9;font-size:.97rem;margin-bottom:1rem">Die Huchefelder Keibelhexen sind eine traditionsreiche Hexengruppe aus dem Pforzheimer Stadtteil Huchenfeld. Jedes Jahr läuten wir am „Schmotzigen" Donnerstag die fünfte Jahreszeit ein und stürmen das Huchenfelder Rathaus.</p>
+        <p class="rv" style="color:var(--g);line-height:1.9;font-size:.97rem;margin-bottom:1rem">Nach dem Einmarsch der Hexen auf dem Rathausplatz übernehmen wir das Rathaus und entführen die Ortsvorsteherin. Bis Aschermittwoch haben die Narren die Rathausherrschaft inne.</p>
+        <p class="rv" style="color:var(--g);line-height:1.9;font-size:.97rem;margin-bottom:1rem">Wir sind stolz auf unsere Tradition und freuen uns über jeden, der mit uns feiert.</p>
+        <div class="hae rv">
           <h3>Das Häs</h3>
-          <p class="editable" id="txt-hae">Unser Erkennungszeichen ist das schwarz-blau karierte Häs – das traditionelle Kostüm der Keibelhexen. Mit der charakteristischen Holzmaske, den markanten Zügen und dem wallenden weißen Haar sind wir in der Region unverwechselbar.</p>
+          <p style="color:var(--g);font-size:.88rem;line-height:1.8">Unser Erkennungszeichen ist das schwarz-blau karierte Häs – das traditionelle Kostüm der Keibelhexen. Mit der charakteristischen Holzmaske, den markanten Zügen und dem wallenden weißen Haar sind wir in der Region unverwechselbar.</p>
         </div>
       </div>
-      <div class="auimg rv" id="auiw" onclick="if(adminMode)adminUpload('about')">
+      <div class="auimg rv">
         <img id="auimg" src="" alt="Keibelhexen">
-        <div class="auiph" id="auiph">📷<span>Bild im Drive-Ordner „Ueber-uns"</span></div>
-        <div class="auiov">📷 Bild ändern</div>
+        <div class="auiph" id="auiph">📷<span>Bild → images/ueber-uns/</span></div>
         <div class="cc"></div>
       </div>
     </div>
@@ -346,14 +301,10 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
     <div class="st rv">Eindrücke</div>
     <h2 class="sh rv">Galerie</h2>
     <div class="sl rv"></div>
-    <div class="dh">📁 Bilder → Drive-Ordner „Galerie"</div>
   </div>
   <div style="padding:0 var(--pad) 3rem">
     <div class="gastrip" id="gastrip"></div>
     <p class="ga-hint">← Scrollen für mehr →</p>
-    <div id="gaAddWrap" style="display:none;margin-top:1.2rem">
-      <button class="btn bo" onclick="adminUpload('gallery')">+ Bild hinzufügen</button>
-    </div>
   </div>
 </section>
 
@@ -364,12 +315,8 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
     <div class="st rv">Wo wir dabei waren</div>
     <h2 class="sh rv">Veranstaltungen</h2>
     <div class="sl rv"></div>
-    <div class="dh">📁 Struktur: Veranstaltungen → 2025 → Rathaussturm</div>
     <div id="yearlist"></div>
-    <p id="veempty" style="color:var(--g);font-size:.9rem;display:none">Noch keine Veranstaltungen.</p>
-    <div id="veAddWrap" style="display:none;margin-top:1rem">
-      <button class="btn bo" onclick="adminAddYear()">+ Jahr hinzufügen</button>
-    </div>
+    <p id="veempty" style="color:var(--g);font-size:.9rem;display:none">Noch keine Veranstaltungen.<br><small>Ordner anlegen: images/veranstaltungen/2025/Rathaussturm/</small></p>
   </div>
 </section>
 
@@ -380,12 +327,8 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
     <div class="st rv">Downloads</div>
     <h2 class="sh rv">Flyer &<br>Ankündigungen</h2>
     <div class="sl rv"></div>
-    <div class="dh">📁 PDFs/Bilder → Drive-Ordner „Flyer"</div>
     <div class="fgrid" id="flgrid"></div>
-    <p id="flempty" style="color:var(--g);font-size:.9rem;margin-top:1rem">Keine Flyer vorhanden.</p>
-    <div id="flAddWrap" style="display:none;margin-top:1.2rem">
-      <button class="btn bo" onclick="adminUpload('flyer')">+ Flyer / PDF hinzufügen</button>
-    </div>
+    <p id="flempty" style="color:var(--g);font-size:.9rem;margin-top:1rem;display:none">Keine Flyer vorhanden.<br><small>Dateien hochladen: images/flyer/</small></p>
   </div>
 </section>
 
@@ -400,7 +343,8 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
       <div>
         <h3 class="rv" style="font-size:1.05rem;font-weight:700;margin-bottom:1.5rem">So erreichst du uns</h3>
         <div class="koi rv"><div class="koic">✉️</div><a href="mailto:keibelhexen@gmx.de">keibelhexen@gmx.de</a></div>
-        <div class="koi rv"><div class="koic">📸</div><a href="#" id="instaLink" target="_blank">@keibelhexen_huchenfeld</a></div>
+        <!-- INSTAGRAM: Handle unten im Script ändern -->
+        <div class="koi rv"><div class="koic">📸</div><a href="https://www.instagram.com/keibelhexen_huchenfeld" id="instaLink" target="_blank">@keibelhexen_huchenfeld</a></div>
         <div class="koi rv"><div class="koic">📍</div><span>Huchenfeld, Pforzheim</span></div>
         <p class="rv" style="margin-top:1.5rem;color:var(--g);font-size:.9rem;line-height:1.8">Fragen, Mitmachen oder einfach Hallo sagen? Wir freuen uns!</p>
       </div>
@@ -422,31 +366,13 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
     <div class="foline"></div>
     <div class="forow">
       <div class="soc">
-        <a href="#" id="instaFoot" target="_blank" title="Instagram">📸</a>
-        <a href="mailto:keibelhexen@gmx.de" title="E-Mail">✉️</a>
+        <a href="https://www.instagram.com/keibelhexen_huchenfeld" id="instaFoot" target="_blank">📸</a>
+        <a href="mailto:keibelhexen@gmx.de">✉️</a>
       </div>
       <p class="focopy">© 2025 Keibelhexen Huchenfeld · Huchenfeld, Pforzheim</p>
-      <span class="foadm" ondblclick="toggleAdmin()">· · ·</span>
     </div>
   </div>
 </footer>
-
-<!-- ADMIN BAR -->
-<div class="abar" id="abar">
-  <span>⬡ Admin</span>
-  <div class="abts">
-    <button class="ab abp" onclick="saveTexts()">💾 Texte</button>
-    <button class="ab abs" onclick="adminUpload('logo')">🖼 Logo</button>
-    <button class="ab abs" onclick="adminUpload('about')">📷 Über-uns</button>
-    <button class="ab abs" onclick="adminUpload('gallery')">🖼 Galerie+</button>
-    <button class="ab abs" onclick="adminUpload('flyer')">📄 Flyer+</button>
-    <button class="ab abs" onclick="adminAddYear()">📅 Jahr+</button>
-    <button class="ab abs" onclick="reloadDrive()">🔄 Reload</button>
-    <button class="ab abs" onclick="editInsta()">📸 Insta</button>
-    <button class="ab abs" onclick="changePw()">🔑 PW</button>
-    <button class="ab abd" onclick="exitAdmin()">✕</button>
-  </div>
-</div>
 
 <!-- LIGHTBOX -->
 <div class="lb" id="lb">
@@ -460,14 +386,20 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
   <div class="lbdots" id="lbdots"></div>
 </div>
 
-<input type="file" id="finput" style="display:none">
-
 <script>
-const DRIVE_URL='https://script.google.com/macros/s/AKfycbxasLe6vLL7z2zKoEIJqeTv1drHGylGwugZW5tN3JVRwN8uSq2KcvgpwKgvsdKfCkqzfA/exec';
+// ══════════════════════════════════════
+// EINSTELLUNGEN – bei Bedarf anpassen
+const GH_USER   = 'Keibelhexen';
+const GH_REPO   = 'Keibelhexen-keibelhexen';
+const GH_BRANCH = 'main';
+// Instagram-Handle hier ändern:
+const INSTA     = 'keibelhexen_huchenfeld';
+// ══════════════════════════════════════
 
-let adminMode=false;
-let dd={logo:null,about:null,gallery:[],flyers:[],events:[]};
-let tx={texts:{},insta:'keibelhexen_huchenfeld'};
+const RAW = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}`;
+const API = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents`;
+
+let dd = {gallery:[],flyers:[],events:[]};
 let lbItems=[],lbIdx=0,lbTx=0;
 
 // ─── INIT ───
@@ -476,12 +408,224 @@ window.addEventListener('DOMContentLoaded',()=>{
   initConfetti();
   initScroll();
   initReveal();
-  loadTexts();
-  renderTexts();
-  loadFromDrive();
+  setInsta();
+  loadFromGitHub();
 });
 
-// ─── HEXENBESEN CURSOR (nur Desktop) ───
+// ─── INSTAGRAM ───
+function setInsta(){
+  const a=document.getElementById('instaLink');
+  if(a){a.href=`https://www.instagram.com/${INSTA}`;a.textContent=`@${INSTA}`;}
+  const b=document.getElementById('instaFoot');
+  if(b) b.href=`https://www.instagram.com/${INSTA}`;
+}
+
+// ─── GITHUB LADEN ───
+const isImg = n=>/\.(jpg|jpeg|png|gif|webp|svg)$/i.test(n);
+const isPdf = n=>/\.pdf$/i.test(n);
+
+async function ghList(path){
+  try{
+    const r=await fetch(`${API}/${path}`);
+    if(!r.ok)return[];
+    const d=await r.json();
+    return Array.isArray(d)?d:[];
+  }catch(e){return[];}
+}
+
+async function loadFromGitHub(){
+  showLoader(true);
+  try{
+    // Logo
+    const logoFiles=await ghList('images/logo');
+    const logoFile=logoFiles.find(f=>isImg(f.name));
+    if(logoFile) setLogo(`${RAW}/images/logo/${logoFile.name}`);
+
+    // Über uns
+    const aboutFiles=await ghList('images/ueber-uns');
+    const aboutFile=aboutFiles.find(f=>isImg(f.name));
+    if(aboutFile) setAboutImg(`${RAW}/images/ueber-uns/${aboutFile.name}`);
+
+    // Galerie
+    const gaFiles=await ghList('images/galerie');
+    dd.gallery=gaFiles.filter(f=>isImg(f.name)).map(f=>`${RAW}/images/galerie/${f.name}`);
+
+    // Flyer
+    const flFiles=await ghList('images/flyer');
+    dd.flyers=flFiles.filter(f=>isImg(f.name)||isPdf(f.name)).map(f=>({
+      name: f.name.replace(/\.[^.]+$/,''),
+      url:  isPdf(f.name)
+              ?`https://docs.google.com/viewer?url=${encodeURIComponent(`${RAW}/images/flyer/${f.name}`)}&embedded=true`
+              :`${RAW}/images/flyer/${f.name}`,
+      downloadUrl:`${RAW}/images/flyer/${f.name}`,
+      type: isPdf(f.name)?'pdf':'img'
+    }));
+
+    // Veranstaltungen
+    const yearFolders=await ghList('images/veranstaltungen');
+    dd.events=[];
+    for(const yf of yearFolders.filter(f=>f.type==='dir'&&!isNaN(parseInt(f.name)))){
+      const locFolders=await ghList(`images/veranstaltungen/${yf.name}`);
+      const locations=[];
+      for(const lf of locFolders.filter(f=>f.type==='dir')){
+        const imgs=await ghList(`images/veranstaltungen/${yf.name}/${lf.name}`);
+        locations.push({
+          name:lf.name,
+          images:imgs.filter(f=>isImg(f.name)).map(f=>({
+            url:`${RAW}/images/veranstaltungen/${yf.name}/${lf.name}/${f.name}`,
+            downloadUrl:`${RAW}/images/veranstaltungen/${yf.name}/${lf.name}/${f.name}`
+          }))
+        });
+      }
+      dd.events.push({year:parseInt(yf.name),locations});
+    }
+    dd.events.sort((a,b)=>b.year-a.year);
+    renderAll();
+  }catch(e){
+    console.warn('GitHub Fehler:',e.message);
+    renderAll();
+  }
+  showLoader(false);
+}
+
+function showLoader(v){document.getElementById('loader').style.display=v?'flex':'none';}
+function renderAll(){renderGallery();renderFlyers();renderEvents();}
+
+// ─── LOGO + ABOUT ───
+function setLogo(src){
+  document.getElementById('navlogo').innerHTML=`<img src="${src}" style="height:36px;filter:drop-shadow(0 0 8px rgba(96,165,250,.5))">`;
+  document.getElementById('hlph').style.display='none';
+  const hw=document.getElementById('hlogo');
+  const old=hw.querySelector('img');if(old)old.remove();
+  const img=document.createElement('img');img.src=src;
+  img.style.cssText='width:clamp(120px,25vw,180px);height:clamp(120px,25vw,180px);object-fit:contain;filter:drop-shadow(0 0 40px rgba(37,99,235,.5));animation:fl 6s ease-in-out infinite';
+  hw.prepend(img);
+}
+function setAboutImg(src){
+  const img=document.getElementById('auimg');img.src=src;img.style.display='block';
+  document.getElementById('auiph').style.display='none';
+}
+
+// ─── GALERIE ───
+function renderGallery(){
+  const s=document.getElementById('gastrip');
+  if(!dd.gallery.length){
+    s.innerHTML='<div class="gi"><div class="giph">📷<span>Bilder → images/galerie/</span></div></div>';return;
+  }
+  s.innerHTML=dd.gallery.map((src,i)=>`
+    <div class="gi" onclick="openLbSet(${i},'gallery')">
+      <img src="${src}" alt="Galerie ${i+1}" loading="lazy">
+    </div>`).join('');
+}
+
+// ─── FLYER ───
+function renderFlyers(){
+  const g=document.getElementById('flgrid'),e=document.getElementById('flempty');
+  if(!dd.flyers.length){g.innerHTML='';e.style.display='block';return;}
+  e.style.display='none';
+  g.innerHTML=dd.flyers.map((f,i)=>`
+    <div class="fc" onclick="openFlyer(${i})">
+      <div class="fp">
+        ${f.type==='pdf'
+          ?`<div style="display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--b3)"><span style="font-size:2.8rem">📄</span><span style="font-size:.72rem;font-weight:700;text-transform:uppercase">PDF</span></div>`
+          :`<img src="${f.url}" alt="${f.name}" loading="lazy">`}
+        <div class="fov"><span>${f.type==='pdf'?'📄 Öffnen':'🔍 Anzeigen'}</span><span style="font-size:.7rem;opacity:.7">⬇ Download</span></div>
+      </div>
+      <div class="finfo"><h3>${f.name}</h3><span class="ftype">${f.type==='pdf'?'PDF':'Bild'} ↗</span></div>
+    </div>`).join('');
+}
+function openFlyer(i){openLbSet(i,'flyer');}
+
+// ─── EVENTS ───
+function renderEvents(){
+  const el=document.getElementById('yearlist'),em=document.getElementById('veempty');
+  if(!dd.events.length){el.innerHTML='';em.style.display='block';return;}
+  em.style.display='none';
+  el.innerHTML=dd.events.map((yr,yi)=>`
+    <div class="ycard" id="yc${yi}">
+      <div class="yhead" onclick="toggleYear(${yi})">
+        <span class="ytit">${yr.year}</span>
+        <div style="display:flex;align-items:center;gap:.8rem">
+          <span style="font-size:.78rem;color:var(--g)">${yr.locations.length} Ort${yr.locations.length!==1?'e':''}</span>
+          <span class="yarr">▼</span>
+        </div>
+      </div>
+      <div class="ybody">
+        ${yr.locations.length
+          ?`<div class="lcgrid">${yr.locations.map((loc,li)=>locCard(loc,yr.year,li)).join('')}</div>`
+          :`<p style="color:var(--g);font-size:.85rem;font-style:italic">Noch keine Bilder.</p>`}
+      </div>
+    </div>`).join('');
+}
+function locCard(loc,year,li){
+  const imgs=loc.images||[];
+  return`<div class="lccard">
+    <div class="lcimgs">${imgs.length
+      ?imgs.map((it,ii)=>`<img src="${it.url}" alt="${loc.name}" loading="lazy" onclick="openLbSetLoc(${year},${li},${ii})">`).join('')
+      :'<div class="lciph">📷<span>Noch keine Bilder</span></div>'}
+    </div>
+    <div class="lcinfo"><div class="lcname">${loc.name}</div></div>
+  </div>`;
+}
+function toggleYear(i){document.getElementById('yc'+i).classList.toggle('open');}
+
+// ─── LIGHTBOX ───
+function openLbSet(startIdx,type){
+  if(type==='gallery') lbItems=dd.gallery.map(src=>({url:src,type:'img',downloadUrl:src}));
+  else if(type==='flyer') lbItems=dd.flyers.map(f=>({url:f.url,type:f.type,name:f.name,downloadUrl:f.downloadUrl}));
+  lbIdx=Math.max(0,Math.min(startIdx,lbItems.length-1));
+  buildLb();
+  document.getElementById('lb').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function openLbSetLoc(year,li,ii){
+  const ev=dd.events.find(e=>e.year===year);if(!ev)return;
+  const imgs=ev.locations[li].images||[];
+  lbItems=imgs.map(it=>({url:it.url,type:'img',downloadUrl:it.downloadUrl}));
+  lbIdx=Math.max(0,Math.min(ii,lbItems.length-1));
+  buildLb();
+  document.getElementById('lb').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function buildLb(){
+  const slides=document.getElementById('lbslides'),dots=document.getElementById('lbdots');
+  slides.style.transform='translateX(0)';
+  slides.innerHTML=lbItems.map((it,i)=>`
+    <div class="lbslide">
+      ${it.type==='pdf'?`<iframe src="${it.url}"></iframe>`:`<img src="${it.url}" alt="Bild ${i+1}">`}
+      <a class="lbdl" href="${it.downloadUrl}" download="${it.name||'download'}" target="_blank">⬇ Herunterladen</a>
+    </div>`).join('');
+  dots.innerHTML=lbItems.length>1?lbItems.map((_,i)=>`<div class="lbdot${i===lbIdx?' on':''}" onclick="lbGo(${i})"></div>`).join(''):'';
+  document.getElementById('lbcnt').textContent=lbItems.length>1?`${lbIdx+1} / ${lbItems.length}`:'';
+  requestAnimationFrame(()=>lbGo(lbIdx,false));
+  const lb=document.getElementById('lb');
+  lb.ontouchstart=e=>{lbTx=e.touches[0].clientX;};
+  lb.ontouchend=e=>{const dx=e.changedTouches[0].clientX-lbTx;if(Math.abs(dx)>45)lbMove(dx<0?1:-1);};
+}
+function lbGo(i,anim=true){
+  lbIdx=Math.max(0,Math.min(i,lbItems.length-1));
+  const s=document.getElementById('lbslides');
+  s.style.transition=anim?'transform .35s cubic-bezier(.4,0,.2,1)':'none';
+  s.style.transform=`translateX(-${lbIdx*100}vw)`;
+  document.querySelectorAll('.lbdot').forEach((d,di)=>d.classList.toggle('on',di===lbIdx));
+  document.getElementById('lbcnt').textContent=lbItems.length>1?`${lbIdx+1} / ${lbItems.length}`:'';
+}
+function lbMove(d){lbGo(lbIdx+d);}
+function closeLb(){
+  document.getElementById('lb').classList.remove('on');
+  document.body.style.overflow='';
+  lbItems=[];lbIdx=0;
+  document.getElementById('lbslides').innerHTML='';
+  document.getElementById('lbdots').innerHTML='';
+}
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('lb').classList.contains('on'))return;
+  if(e.key==='ArrowLeft')lbMove(-1);
+  if(e.key==='ArrowRight')lbMove(1);
+  if(e.key==='Escape')closeLb();
+});
+
+// ─── HEXENBESEN CURSOR ───
 function initCursor(){
   if(window.innerWidth<=768)return;
   try{
@@ -543,296 +687,7 @@ function initReveal(){
   setTimeout(()=>document.querySelectorAll('.rv').forEach(el=>el.classList.add('on')),900);
 }
 
-// ─── TEXTE ───
-function loadTexts(){
-  try{const r=localStorage.getItem('khx_texts')||localStorage.getItem('khx_v3');if(r)tx={...tx,...JSON.parse(r)};}catch(e){}
-}
-function renderTexts(){
-  Object.entries(tx.texts||{}).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.innerHTML=v;});
-  setInsta(tx.insta||'keibelhexen_huchenfeld');
-}
-function saveTexts(){
-  document.querySelectorAll('.editable[id]').forEach(el=>{tx.texts[el.id]=el.innerHTML;});
-  try{localStorage.setItem('khx_texts',JSON.stringify(tx));toast('✅ Texte gespeichert!');}
-  catch(e){toast('❌ Fehler');}
-}
-function setInsta(h){
-  const a=document.getElementById('instaLink');if(a){a.href=`https://www.instagram.com/${h}`;a.textContent=`@${h}`;}
-  const b=document.getElementById('instaFoot');if(b)b.href=`https://www.instagram.com/${h}`;
-}
-function editInsta(){
-  const h=prompt('Instagram-Handle (ohne @):',tx.insta);
-  if(h){tx.insta=h.trim().replace('@','');setInsta(tx.insta);toast('Gesetzt – Texte speichern!');}
-}
-
-// ─── DRIVE LADEN ───
-async function loadFromDrive(){
-  if(!DRIVE_URL){renderAll();return;}
-  showLoader(true);
-  try{
-    const r=await fetch(DRIVE_URL+'?t='+Date.now());
-    const data=await r.json();
-    if(data.error)throw new Error(data.error);
-    dd=data;
-    if(dd.logo)setLogo(dd.logo);
-    if(dd.about)setAboutImg(dd.about);
-    renderAll();
-  }catch(e){
-    console.warn('Drive:',e.message);
-    renderAll();
-  }
-  showLoader(false);
-}
-async function reloadDrive(){await loadFromDrive();toast('🔄 Neu geladen');}
-function renderAll(){renderGallery();renderFlyers();renderEvents();}
-function showLoader(v){document.getElementById('loader').style.display=v?'flex':'none';}
-
-// ─── LOGO + ABOUT ───
-function setLogo(src){
-  document.getElementById('navlogo').innerHTML=`<img src="${src}" style="height:36px;filter:drop-shadow(0 0 8px rgba(96,165,250,.5))">`;
-  document.getElementById('hlph').style.display='none';
-  const hw=document.getElementById('hlogo');
-  const old=hw.querySelector('img');if(old)old.remove();
-  const img=document.createElement('img');img.src=src;
-  img.style.cssText='width:clamp(120px,25vw,180px);height:clamp(120px,25vw,180px);object-fit:contain;filter:drop-shadow(0 0 40px rgba(37,99,235,.5));animation:fl 6s ease-in-out infinite';
-  hw.prepend(img);
-}
-function setAboutImg(src){
-  const img=document.getElementById('auimg');img.src=src;img.style.display='block';
-  document.getElementById('auiph').style.display='none';
-}
-
-// ─── GALERIE ───
-function renderGallery(){
-  const s=document.getElementById('gastrip');
-  const imgs=dd.gallery||[];
-  if(!imgs.length){
-    s.innerHTML='<div class="gi"><div class="giph">📷<span>Bilder im Drive-Ordner „Galerie"</span></div></div>';
-    return;
-  }
-  s.innerHTML=imgs.map((src,i)=>`
-    <div class="gi" onclick="openLbSet(${i},'gallery')">
-      <img src="${src}" alt="Galerie ${i+1}" loading="lazy">
-      <button class="garmbtn" onclick="event.stopPropagation();rmGa(${i})">✕</button>
-    </div>`).join('');
-}
-function rmGa(i){dd.gallery.splice(i,1);renderGallery();}
-
-// ─── FLYER ───
-function renderFlyers(){
-  const g=document.getElementById('flgrid'),e=document.getElementById('flempty');
-  const fl=dd.flyers||[];
-  if(!fl.length){g.innerHTML='';e.style.display='block';return;}
-  e.style.display='none';
-  g.innerHTML=fl.map((f,i)=>`
-    <div class="fc" onclick="openFlyer(${i})">
-      <div class="fp">
-        ${f.type==='pdf'
-          ?`<div style="display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--b3)"><span style="font-size:2.8rem">📄</span><span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em">PDF</span></div>`
-          :`<img src="${f.url}" alt="${f.name}" loading="lazy">`}
-        <div class="fov"><span>${f.type==='pdf'?'📄 Öffnen':'🔍 Anzeigen'}</span><span style="font-size:.7rem;opacity:.7">⬇ Download</span></div>
-      </div>
-      <div class="finfo"><h3>${f.name}</h3><span class="ftype">${f.type==='pdf'?'PDF':'Bild'} ↗</span></div>
-      <button class="frmbtn" onclick="event.stopPropagation();rmFl(${i})">✕</button>
-    </div>`).join('');
-}
-function rmFl(i){dd.flyers.splice(i,1);renderFlyers();}
-function openFlyer(i){openLbSet(i,'flyer');}
-
-// ─── EVENTS ───
-function renderEvents(){
-  const el=document.getElementById('yearlist'),em=document.getElementById('veempty'),aw=document.getElementById('veAddWrap');
-  if(adminMode)aw.style.display='block';
-  const evs=dd.events||[];
-  if(!evs.length){el.innerHTML='';em.style.display='block';return;}
-  em.style.display='none';
-  el.innerHTML=evs.map((yr,yi)=>`
-    <div class="ycard" id="yc${yi}">
-      <div class="yhead" onclick="toggleYear(${yi})">
-        <span class="ytit">${yr.year}</span>
-        <div class="ymeta">
-          <span style="font-size:.78rem;color:var(--g)">${yr.locations.length} Ort${yr.locations.length!==1?'e':''}</span>
-          ${adminMode?`<button class="ab abs" style="padding:.25rem .6rem;font-size:.7rem" onclick="event.stopPropagation();adminAddLoc(${yr.year})">+ Ort</button>`:''}
-          <span class="yarr">▼</span>
-        </div>
-      </div>
-      <div class="ybody">
-        ${yr.locations.length
-          ?`<div class="lcgrid">${yr.locations.map((loc,li)=>locCard(loc,yr.year,li)).join('')}</div>`
-          :`<p style="color:var(--g);font-size:.85rem;font-style:italic;margin-bottom:1rem">Noch keine Orte.</p>`}
-      </div>
-    </div>`).join('');
-}
-function locCard(loc,year,li){
-  const imgs=loc.images||[];
-  return`<div class="lccard">
-    <div class="lcimgs">${imgs.length
-      ?imgs.map((it,ii)=>`<img src="${it.url||it}" alt="${loc.name}" loading="lazy" onclick="openLbSetLoc(${year},${li},${ii})">`).join('')
-      :'<div class="lciph">📷<span>Noch keine Bilder</span></div>'}
-    </div>
-    <div class="lcinfo">
-      <div class="lcname">${loc.name}</div>
-      ${adminMode?`<button class="btn bo" style="padding:.3rem .7rem;font-size:.74rem;margin-top:.5rem" onclick="adminUploadLocImg(${year},'${loc.name.replace(/'/g,"\\'")}')">+ Bild</button>`:''}
-    </div>
-  </div>`;
-}
-function toggleYear(i){document.getElementById('yc'+i).classList.toggle('open');}
-
-// ─── LIGHTBOX ───
-function openLbSet(startIdx,type){
-  if(type==='gallery') lbItems=(dd.gallery||[]).map(src=>({url:src,type:'img',downloadUrl:src}));
-  else if(type==='flyer') lbItems=(dd.flyers||[]).map(f=>({url:f.url,type:f.type,name:f.name,downloadUrl:f.downloadUrl||f.url}));
-  lbIdx=Math.max(0,Math.min(startIdx,lbItems.length-1));
-  buildLb();
-  document.getElementById('lb').classList.add('on');
-  document.body.style.overflow='hidden';
-}
-function openLbSetLoc(year,li,ii){
-  const ev=(dd.events||[]).find(e=>e.year===year);if(!ev)return;
-  const imgs=ev.locations[li].images||[];
-  lbItems=imgs.map(it=>({url:it.url||it,type:'img',downloadUrl:it.downloadUrl||it.url||it}));
-  lbIdx=Math.max(0,Math.min(ii,lbItems.length-1));
-  buildLb();
-  document.getElementById('lb').classList.add('on');
-  document.body.style.overflow='hidden';
-}
-function buildLb(){
-  const slides=document.getElementById('lbslides'),dots=document.getElementById('lbdots');
-  slides.style.transform='translateX(0)';
-  slides.innerHTML=lbItems.map((it,i)=>`
-    <div class="lbslide">
-      ${it.type==='pdf'
-        ?`<iframe src="${it.url}" title="PDF ${i+1}"></iframe>`
-        :`<img src="${it.url}" alt="Bild ${i+1}">`}
-      <a class="lbdl" href="${it.downloadUrl||it.url}" download="${it.name||'download'}" target="_blank">⬇ Herunterladen</a>
-    </div>`).join('');
-  dots.innerHTML=lbItems.length>1
-    ?lbItems.map((_,i)=>`<div class="lbdot${i===lbIdx?' on':''}" onclick="lbGo(${i})"></div>`).join(''):'';
-  document.getElementById('lbcnt').textContent=lbItems.length>1?`${lbIdx+1} / ${lbItems.length}`:'';
-  requestAnimationFrame(()=>lbGo(lbIdx,false));
-  const lb=document.getElementById('lb');
-  lb.ontouchstart=e=>{lbTx=e.touches[0].clientX;};
-  lb.ontouchend=e=>{const dx=e.changedTouches[0].clientX-lbTx;if(Math.abs(dx)>45)lbMove(dx<0?1:-1);};
-}
-function lbGo(i,anim=true){
-  lbIdx=Math.max(0,Math.min(i,lbItems.length-1));
-  const slides=document.getElementById('lbslides');
-  slides.style.transition=anim?'transform .35s cubic-bezier(.4,0,.2,1)':'none';
-  slides.style.transform=`translateX(-${lbIdx*100}vw)`;
-  document.querySelectorAll('.lbdot').forEach((d,di)=>d.classList.toggle('on',di===lbIdx));
-  document.getElementById('lbcnt').textContent=lbItems.length>1?`${lbIdx+1} / ${lbItems.length}`:'';
-}
-function lbMove(d){lbGo(lbIdx+d);}
-function closeLb(){
-  document.getElementById('lb').classList.remove('on');
-  document.body.style.overflow='';
-  lbItems=[];lbIdx=0;
-  document.getElementById('lbslides').innerHTML='';
-  document.getElementById('lbdots').innerHTML='';
-}
-document.addEventListener('keydown',e=>{
-  if(!document.getElementById('lb').classList.contains('on'))return;
-  if(e.key==='ArrowLeft')lbMove(-1);
-  if(e.key==='ArrowRight')lbMove(1);
-  if(e.key==='Escape')closeLb();
-});
-
-// ─── DRIVE SCHREIBEN ───
-async function drivePost(body){
-  if(!DRIVE_URL){toast('⚠️ DRIVE_URL fehlt');return null;}
-  try{
-    const r=await fetch(DRIVE_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)});
-    const data=await r.json();
-    if(data.error)throw new Error(data.error);
-    return data;
-  }catch(e){toast('❌ '+e.message);return null;}
-}
-function compress(file,maxW=1200,q=0.78){
-  return new Promise(res=>{
-    const img=new Image(),url=URL.createObjectURL(file);
-    img.onload=()=>{
-      const s=Math.min(1,maxW/Math.max(img.width,img.height));
-      const c=document.createElement('canvas');c.width=~~(img.width*s);c.height=~~(img.height*s);
-      c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);res(c.toDataURL('image/jpeg',q));
-    };img.src=url;
-  });
-}
-function toB64(file){return new Promise((r,j)=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.onerror=j;fr.readAsDataURL(file)});}
-function pickFile(accept,cb){
-  const inp=document.getElementById('finput');inp.accept=accept;
-  inp.onchange=async e=>{if(e.target.files[0])cb(e.target.files[0]);inp.value='';};inp.click();
-}
-function adminUpload(type){
-  if(!adminMode&&type!=='logo')return;
-  const accept=type==='flyer'?'image/*,application/pdf':'image/*';
-  pickFile(accept,async f=>{
-    toast('⏳ Wird hochgeladen…');
-    const b64=f.type==='application/pdf'?await toB64(f):await compress(f,type==='logo'?400:1200,type==='logo'?.9:.78);
-    const actions={logo:'uploadLogo',about:'uploadAbout',gallery:'uploadGallery',flyer:'uploadFlyer'};
-    const res=await drivePost({action:actions[type],base64:b64,filename:f.name,mimeType:f.type});
-    if(res?.ok){
-      if(type==='logo')setLogo(res.url);
-      if(type==='about')setAboutImg(res.url);
-      await reloadDrive();toast('✅ Hochgeladen!');
-    }
-  });
-}
-async function adminAddYear(){
-  const y=prompt('Jahr (z.B. 2026):');if(!y||isNaN(y))return;
-  toast('⏳ Wird angelegt…');
-  const res=await drivePost({action:'createYear',year:parseInt(y)});
-  if(res?.ok){await reloadDrive();toast('✅ Jahr '+y+' angelegt!');}
-}
-async function adminAddLoc(year){
-  const name=prompt('Ort / Veranstaltungsname:');if(!name)return;
-  toast('⏳ Wird angelegt…');
-  const res=await drivePost({action:'createLocation',year,name});
-  if(res?.ok){await reloadDrive();toast('✅ "'+name+'" angelegt!');}
-}
-async function adminUploadLocImg(year,location){
-  pickFile('image/*',async f=>{
-    toast('⏳ Bild wird hochgeladen…');
-    const b64=await compress(f);
-    const res=await drivePost({action:'uploadImage',year,location,base64:b64,filename:f.name});
-    if(res?.ok){await reloadDrive();toast('✅ Bild gespeichert!');}
-  });
-}
-
-// ─── ADMIN ───
-const DPW='Hexe2026';
-function getPw(){return localStorage.getItem('khx_pw')||DPW;}
-function toggleAdmin(){adminMode?exitAdmin():enterAdmin();}
-function enterAdmin(){
-  const pw=prompt('🔐 Passwort:');if(!pw)return;
-  if(pw!==getPw()){toast('❌ Falsches Passwort');return;}
-  adminMode=true;
-  document.body.classList.add('admin-mode');
-  document.getElementById('abar').classList.add('on');
-  document.getElementById('gaAddWrap').style.display='block';
-  document.getElementById('flAddWrap').style.display='block';
-  document.getElementById('veAddWrap').style.display='block';
-  document.querySelectorAll('.editable').forEach(e=>e.contentEditable='true');
-  renderEvents();
-  toast('✅ Admin aktiv');
-}
-function exitAdmin(){
-  adminMode=false;
-  document.body.classList.remove('admin-mode');
-  document.getElementById('abar').classList.remove('on');
-  document.getElementById('gaAddWrap').style.display='none';
-  document.getElementById('flAddWrap').style.display='none';
-  document.getElementById('veAddWrap').style.display='none';
-  document.querySelectorAll('.editable').forEach(e=>e.contentEditable='false');
-  renderEvents();
-}
-function changePw(){
-  const a=prompt('Aktuelles PW:');if(a!==getPw()){toast('❌ Falsch');return;}
-  const n=prompt('Neues PW:');if(!n||n.length<4){toast('❌ Zu kurz');return;}
-  if(n!==prompt('Bestätigen:'))return;
-  localStorage.setItem('khx_pw',n);toast('✅ PW geändert!');
-}
-
-// ─── MAIL ───
+// ─── KONTAKT ───
 function sendMail(){
   const n=document.getElementById('fN').value.trim(),e=document.getElementById('fE').value.trim(),
         s=document.getElementById('fS').value.trim(),m=document.getElementById('fM').value.trim();
@@ -842,8 +697,8 @@ function sendMail(){
 
 // ─── MENU ───
 function tmenu(){
-  const nm=document.getElementById('navlinks'),hbg=document.getElementById('hbg');
-  nm.classList.toggle('open');hbg.classList.toggle('open');
+  document.getElementById('navlinks').classList.toggle('open');
+  document.getElementById('hbg').classList.toggle('open');
 }
 document.querySelectorAll('.nm a').forEach(a=>a.addEventListener('click',()=>{
   document.getElementById('navlinks').classList.remove('open');

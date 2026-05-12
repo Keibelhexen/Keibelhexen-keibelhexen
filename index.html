@@ -229,7 +229,6 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
     <li><a href="#geschichte">Geschichte</a></li>
     <li><a href="#tr">Termine</a></li>
     <li><a href="#ga">Galerie</a></li>
-    <li><a href="#ve">Veranstaltungen</a></li>
     <li><a href="#fl">Flyer</a></li>
     <li><a href="#ko">Kontakt</a></li>
   </ul>
@@ -361,18 +360,6 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
   <div style="padding:0 var(--pad) 3rem">
     <div class="gastrip" id="gastrip"></div>
     <p class="ga-hint">← Scrollen für mehr →</p>
-  </div>
-</section>
-
-<!-- VERANSTALTUNGEN -->
-<section id="ve" style="padding:0;background:var(--ink)">
-  <div class="si">
-    <div class="sn rv">04</div>
-    <div class="st rv">Wo wir dabei waren</div>
-    <h2 class="sh rv">Veranstaltungen</h2>
-    <div class="sl rv"></div>
-    <div id="yearlist"></div>
-    <p id="veempty" style="color:var(--g);font-size:.9rem;display:none">Noch keine Veranstaltungen.<br><small>Ordner anlegen: images/veranstaltungen/2025/Rathaussturm/</small></p>
   </div>
 </section>
 
@@ -537,25 +524,8 @@ async function loadFromGitHub(){
       type: isPdf(f.name)?'pdf':'img'
     }));
 
-    // Veranstaltungen
-    const yearFolders=await ghList('images/veranstaltungen');
-    dd.events=[];
-    for(const yf of yearFolders.filter(f=>f.type==='dir'&&!isNaN(parseInt(f.name)))){
-      const locFolders=await ghList(`images/veranstaltungen/${yf.name}`);
-      const locations=[];
-      for(const lf of locFolders.filter(f=>f.type==='dir')){
-        const imgs=await ghList(`images/veranstaltungen/${yf.name}/${lf.name}`);
-        locations.push({
-          name:lf.name,
-          images:imgs.filter(f=>isImg(f.name)).map(f=>({
-            url:`${RAW}/images/veranstaltungen/${yf.name}/${lf.name}/${f.name}`,
-            downloadUrl:`${RAW}/images/veranstaltungen/${yf.name}/${lf.name}/${f.name}`
-          }))
-        });
-      }
-      dd.events.push({year:parseInt(yf.name),locations});
-    }
-    dd.events.sort((a,b)=>b.year-a.year);
+    // Veranstaltungen laden entfernt
+    dd.events = [];
     renderAll();
   }catch(e){
     console.warn('GitHub Fehler:',e.message);

@@ -272,6 +272,22 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
           <h3>Das Häs</h3>
           <p style="color:var(--g);font-size:.88rem;line-height:1.8">Unser Erkennungszeichen ist das schwarz-blau karierte Häs – das traditionelle Kostüm der Keibelhexen. Mit der charakteristischen Holzmaske, den markanten Zügen, dem langen gelben Schnabel und dem wallenden weißen Haar sind wir in der ganzen Region unverwechselbar.</p>
         </div>
+
+        <!-- MASKE -->
+        <div class="rv" style="margin-top:1.5rem">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--b3);margin-bottom:.8rem">Die Maske</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:start">
+            <div>
+              <p style="color:var(--g);font-size:.88rem;line-height:1.8">Das Herzstück unseres Häs ist die handgeschnitzte Holzmaske – ein unverkennbares Kunstwerk mit dem charakteristischen langen gelben Schnabel, den markanten Zügen und dem wallenden weißen Haar. Jede Maske ist ein Unikat und wird mit großer Sorgfalt gefertigt.</p>
+            </div>
+            <div id="maskeImgWrap" style="background:var(--ink2);border:1px solid var(--dim);border-radius:8px;overflow:hidden;aspect-ratio:1">
+              <div id="maskeImgPh" style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--g);font-size:.78rem;padding:1rem;text-align:center">
+                🎭<span>Maskenbild hochladen:<br><strong>images/maske/</strong></span>
+              </div>
+              <img id="maskeImgEl" src="" alt="Keibelhexen Maske Rohling" style="width:100%;height:100%;object-fit:cover;display:none">
+            </div>
+          </div>
+        </div>
       </div>
       <div class="auimg rv">
         <img id="auimg" src="" alt="Keibelhexen">
@@ -409,7 +425,7 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
         <a href="https://www.instagram.com/keibelhexen_huchenfeld" id="instaFoot" target="_blank">📸</a>
         <a href="mailto:keibelhexen@gmx.de">✉️</a>
       </div>
-      <p class="focopy">© 2026 Keibelhexen Huchenfeld · Huchenfeld, Pforzheim</p>
+      <p class="focopy">© 2025 Keibelhexen Huchenfeld · Huchenfeld, Pforzheim</p>
     </div>
   </div>
 </footer>
@@ -485,6 +501,16 @@ async function loadFromGitHub(){
     const aboutFiles=await ghList('images/ueber-uns');
     const aboutFile=aboutFiles.find(f=>isImg(f.name));
     if(aboutFile) setAboutImg(`${RAW}/images/ueber-uns/${aboutFile.name}`);
+
+    // Maske
+    const maskeFiles = await ghList('images/maske');
+    const maskeFile  = maskeFiles.find(f => isImg(f.name));
+    if (maskeFile) {
+      const img = document.getElementById('maskeImgEl');
+      img.src = `${RAW}/images/maske/${maskeFile.name}`;
+      img.style.display = 'block';
+      document.getElementById('maskeImgPh').style.display = 'none';
+    }
 
     // Geschichte Zeitungsbild
     const geschFiles = await ghList('images/geschichte');

@@ -20,11 +20,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--ink);color:var
 .spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* KARBATSCHE CURSOR – nur Desktop mit Maus */
-#whip-cursor{position:fixed;top:0;left:0;width:70px;height:70px;pointer-events:none;z-index:9999;display:none;will-change:transform;transition:opacity .15s}
-#whip-cursor svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 10px rgba(0,0,0,.55))}
+/* HEXENBESEN CURSOR + LUFTWIRBEL */
+#broom-cursor{position:fixed;top:0;left:0;width:80px;height:80px;pointer-events:none;z-index:9999;display:none;will-change:transform;transition:opacity .15s}
+#broom-cursor svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 10px rgba(0,0,0,.55))}
+.whip-trail{position:fixed;pointer-events:none;z-index:9998;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,rgba(220,235,255,.55) 0%,rgba(96,165,250,.35) 35%,rgba(37,99,235,.15) 65%,transparent 100%);margin:-7px 0 0 -7px;opacity:0;will-change:transform,opacity;filter:blur(.6px)}
 @media(hover:hover) and (min-width:769px){
-  #whip-cursor{display:block}
+  #broom-cursor{display:block}
   body{cursor:none}
   a,button,.gi,.fc,.zk-card,.lk-list a,.btn,[onclick],label,.koi a{cursor:none}
   input,textarea,select{cursor:text!important}
@@ -124,7 +125,7 @@ nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(-
 .zk-name{font-size:1rem;font-weight:800;letter-spacing:-.01em;color:var(--w)}
 .zk-role{font-size:.7rem;color:var(--b3);letter-spacing:.08em;margin-top:.25rem;text-transform:uppercase;font-weight:700}
 .zk-subtitle{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--b3);margin:3rem 0 1.2rem;padding-bottom:.6rem;border-bottom:1px solid var(--dim)}
-.zk-grid-medien{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,260px));gap:1.2rem;justify-content:start}
+.zk-grid-medien{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,260px));gap:1.2rem;justify-content:center}
 
 /* GESCHICHTE */
 .gesch-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
@@ -252,7 +253,7 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
   .ga-next{right:.3rem}
   .fgrid{grid-template-columns:repeat(2,1fr)}
   .zk-grid{grid-template-columns:repeat(2,1fr);gap:.9rem}
-  .zk-grid-medien{grid-template-columns:repeat(2,1fr);justify-content:center}
+  .zk-grid-medien{grid-template-columns:minmax(0,1fr);max-width:240px;margin:0 auto}
   .lbnav{display:none}
   .forow{flex-direction:column;align-items:center;text-align:center}
   #confetti{display:none}
@@ -270,22 +271,63 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
 </head>
 <body>
 
-<!-- KARBATSCHE CURSOR -->
-<div id="whip-cursor" aria-hidden="true">
+<!-- HEXENBESEN CURSOR -->
+<div id="broom-cursor" aria-hidden="true">
   <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-    <!-- Spitze = Klickpunkt -->
-    <circle cx="12" cy="12" r="2" fill="#000"/>
-    <!-- Peitsche -->
-    <path d="M12 12 C 40 20, 70 40, 95 70 S 150 120, 175 80 S 140 20, 100 40"
-          fill="none" stroke="#3b2414" stroke-width="8" stroke-linecap="round"/>
-    <!-- Lederstruktur -->
-    <path d="M12 12 C 40 20, 70 40, 95 70 S 150 120, 175 80 S 140 20, 100 40"
-          fill="none" stroke="#5a3820" stroke-width="3" stroke-linecap="round" stroke-dasharray="4 6"/>
-    <!-- Griff -->
-    <rect x="160" y="55" width="28" height="55" rx="10" fill="#2a170d" transform="rotate(35 160 55)"/>
-    <!-- Goldene Enden -->
-    <rect x="157" y="53" width="32" height="8" rx="4" fill="#caa54a" transform="rotate(35 157 53)"/>
-    <rect x="157" y="102" width="32" height="8" rx="4" fill="#caa54a" transform="rotate(35 157 102)"/>
+    <defs>
+      <linearGradient id="bs" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#b87a3e"/>
+        <stop offset="55%" stop-color="#7a4520"/>
+        <stop offset="100%" stop-color="#4a2a0e"/>
+      </linearGradient>
+    </defs>
+
+    <!-- Klickpunkt-Marker (transparent, nur als Anker) -->
+    <circle cx="10" cy="10" r="1" fill="#000" opacity="0"/>
+
+    <!-- Stiel-Schatten -->
+    <line x1="10" y1="10" x2="115" y2="115" stroke="#000" stroke-width="9" stroke-linecap="round" opacity=".4"/>
+    <!-- Stiel -->
+    <line x1="10" y1="10" x2="115" y2="115" stroke="url(#bs)" stroke-width="7" stroke-linecap="round"/>
+    <!-- Stiel-Glanz -->
+    <line x1="12" y1="11" x2="113" y2="112" stroke="#d8a868" stroke-width="1.5" stroke-linecap="round" opacity=".75"/>
+
+    <!-- Bindung (Lederband) -->
+    <g transform="rotate(45 120 120)">
+      <ellipse cx="120" cy="120" rx="10" ry="15" fill="#1f1004" stroke="#3a2008" stroke-width="1"/>
+      <line x1="111" y1="118" x2="129" y2="118" stroke="#000" stroke-width="1.2" opacity=".55"/>
+      <line x1="111" y1="123" x2="129" y2="123" stroke="#000" stroke-width="1.2" opacity=".55"/>
+    </g>
+
+    <!-- Borsten Schicht 1 (hinten, dunkel) -->
+    <g stroke-linecap="round" fill="none" stroke="#3a2008" stroke-width="2.8">
+      <line x1="124" y1="124" x2="155" y2="195"/>
+      <line x1="125" y1="125" x2="180" y2="188"/>
+      <line x1="127" y1="127" x2="195" y2="170"/>
+      <line x1="128" y1="128" x2="196" y2="140"/>
+      <line x1="128" y1="128" x2="195" y2="112"/>
+      <line x1="126" y1="126" x2="178" y2="96"/>
+      <line x1="125" y1="125" x2="155" y2="92"/>
+    </g>
+
+    <!-- Borsten Schicht 2 (mittel) -->
+    <g stroke-linecap="round" fill="none" stroke="#8b5a25" stroke-width="2.2">
+      <line x1="125" y1="125" x2="145" y2="190"/>
+      <line x1="126" y1="126" x2="168" y2="184"/>
+      <line x1="128" y1="128" x2="188" y2="158"/>
+      <line x1="128" y1="128" x2="188" y2="125"/>
+      <line x1="127" y1="127" x2="170" y2="103"/>
+      <line x1="126" y1="126" x2="148" y2="100"/>
+    </g>
+
+    <!-- Borsten Schicht 3 (vorn, hell) -->
+    <g stroke-linecap="round" fill="none" stroke="#caa860" stroke-width="1.5">
+      <line x1="126" y1="126" x2="148" y2="178"/>
+      <line x1="127" y1="127" x2="170" y2="170"/>
+      <line x1="128" y1="128" x2="180" y2="146"/>
+      <line x1="128" y1="128" x2="178" y2="118"/>
+      <line x1="127" y1="127" x2="158" y2="106"/>
+    </g>
   </svg>
 </div>
 
@@ -391,14 +433,10 @@ footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var
       <p>Intern nennen wir unsere Truppe die Zirkel. Das klingt vielleicht nach einer runden Sache, ist aber vor allem eines: effizient. Sieben Köpfe, die dafür sorgen, dass der Laden läuft und die Party niemals stoppt, ohne dass einer alleine die ganze Last tragen muss.</p>
     </div>
 
-    <div class="zk-grid rv" id="zirkelGrid">
-      <!-- Karten per JS. Bilder in images/zirkel/<vorname>.jpg -->
-    </div>
+    <div class="zk-grid rv" id="zirkelGrid"></div>
 
     <div class="zk-subtitle rv">Medienteam</div>
-    <div class="zk-grid-medien rv" id="medienGrid">
-      <!-- Karten per JS. Bilder in images/zirkel/medienteam1.jpg, medienteam2.jpg -->
-    </div>
+    <div class="zk-grid-medien rv" id="medienGrid"></div>
   </div>
 </section>
 
@@ -569,21 +607,22 @@ const GH_REPO   = 'Keibelhexen-keibelhexen';
 const GH_BRANCH = 'main';
 const INSTA     = 'keibelhexen_huchenfeld';
 
-// ZIRKEL – Reihenfolge und Beschriftung der 7 Karten
+// ZIRKEL – Reihenfolge und Beschriftung der Karten
 // Bilder in images/zirkel/ ablegen, Dateiname beginnt mit dem Vornamen
 const ZIRKEL = [
-  {name:'Manuel', role:'Oberhexe'},
-  {name:'Nicola', role:'Kassenhexe'},
-  {name:'Uwe',    role:'Vernunftshexe'},
+  {name:'Manuel', role:'Ober-Hexe'},
+  {name:'Nicola', role:'Kassen-Hexe'},
+  {name:'Uwe',    role:'Vernunft-Hexe'},
   {name:'Robin',  role:'Getränke-DJ-Hexe'},
-  {name:'Petra',  role:'Kreativhexe'},
-  {name:'Frank',  role:'Ichbinauchdabeihexe'},
-  {name:'Marcel', role:'Hands-on-hexe'}
+  {name:'Petra',  role:'Kreativ-Hexe'},
+  {name:'Frank',  role:'Ichbinauchdabei-Hexe'},
+  {name:'Marcel', role:'Hands-on-Hexe'}
 ];
 
-// MEDIENTEAM – 2 Plätze. Dateien in images/zirkel/ ablegen,
-// Dateiname beginnt mit "medien" (z.B. medienteam1.jpg, medienteam2.jpg)
-const MEDIENTEAM_SIZE = 2;
+// MEDIENTEAM – Bilder in images/zirkel/ ablegen, Dateiname beginnt mit dem Namen
+const MEDIENTEAM = [
+  {name:'Vero', role:'Medienteam'}
+];
 // ══════════════════════════════════════
 
 const RAW = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}`;
@@ -638,7 +677,6 @@ function videoMime(name){
   const ext=name.split('.').pop().toLowerCase();
   if(ext==='webm')return'video/webm';
   if(ext==='ogv')return'video/ogg';
-  if(ext==='mov'||ext==='m4v')return'video/mp4';
   return'video/mp4';
 }
 
@@ -687,19 +725,15 @@ async function loadFromGitHub(){
       document.getElementById('geschImgPh').style.display='none';
     }
 
-    // Zirkel + Medienteam
+    // Zirkel + Medienteam (alle in images/zirkel/)
     const zirkelFiles=(await ghList('images/zirkel')).filter(f=>isImg(f.name));
     dd.zirkel=ZIRKEL.map(p=>{
       const file=findPersonImage(zirkelFiles, p.name);
       return file?`${RAW}/images/zirkel/${file.name}`:null;
     });
-    const medienFiles=zirkelFiles.filter(f=>{
-      const base=f.name.toLowerCase().replace(/\.[^.]+$/,'');
-      return base.startsWith('medien');
-    }).sort((a,b)=>a.name.localeCompare(b.name));
-    dd.medienteam=Array.from({length:MEDIENTEAM_SIZE},(_,i)=>{
-      const f=medienFiles[i];
-      return f?`${RAW}/images/zirkel/${f.name}`:null;
+    dd.medienteam=MEDIENTEAM.map(p=>{
+      const file=findPersonImage(zirkelFiles, p.name);
+      return file?`${RAW}/images/zirkel/${file.name}`:null;
     });
 
     // Galerie
@@ -744,40 +778,24 @@ function setAboutImg(src){
 }
 
 // ─── ZIRKEL + MEDIENTEAM ───
+function renderPersonCard(p, src){
+  return `<div class="zk-card">
+    <div class="zk-img">
+      ${src
+        ?`<img src="${src}" alt="${p.name} – ${p.role}" loading="lazy">`
+        :`<div class="zk-imgph"><span>👤</span><span>Bild: images/zirkel/${p.name.toLowerCase()}.jpg</span></div>`}
+    </div>
+    <div class="zk-info">
+      <div class="zk-name">${p.name}</div>
+      <div class="zk-role">${p.role}</div>
+    </div>
+  </div>`;
+}
 function renderZirkel(){
   const grid=document.getElementById('zirkelGrid');
-  if(grid){
-    grid.innerHTML=ZIRKEL.map((p,i)=>{
-      const src=dd.zirkel?dd.zirkel[i]:null;
-      return `<div class="zk-card">
-        <div class="zk-img">
-          ${src
-            ?`<img src="${src}" alt="${p.name} – ${p.role}" loading="lazy">`
-            :`<div class="zk-imgph"><span>👤</span><span>Bild: images/zirkel/${p.name.toLowerCase()}.jpg</span></div>`}
-        </div>
-        <div class="zk-info">
-          <div class="zk-name">${p.name}</div>
-          <div class="zk-role">${p.role}</div>
-        </div>
-      </div>`;
-    }).join('');
-  }
+  if(grid) grid.innerHTML=ZIRKEL.map((p,i)=>renderPersonCard(p, dd.zirkel?.[i])).join('');
   const mgrid=document.getElementById('medienGrid');
-  if(mgrid){
-    mgrid.innerHTML=Array.from({length:MEDIENTEAM_SIZE},(_,i)=>{
-      const src=dd.medienteam?dd.medienteam[i]:null;
-      return `<div class="zk-card">
-        <div class="zk-img">
-          ${src
-            ?`<img src="${src}" alt="Medienteam" loading="lazy">`
-            :`<div class="zk-imgph"><span>📸</span><span>Bild: images/zirkel/medienteam${i+1}.jpg</span></div>`}
-        </div>
-        <div class="zk-info">
-          <div class="zk-name">Medienteam</div>
-        </div>
-      </div>`;
-    }).join('');
-  }
+  if(mgrid) mgrid.innerHTML=MEDIENTEAM.map((p,i)=>renderPersonCard(p, dd.medienteam?.[i])).join('');
 }
 
 // ─── GALERIE ───
@@ -862,14 +880,48 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape')closeLb();
 });
 
-// ─── KARBATSCHE CURSOR ───
+// ─── HEXENBESEN CURSOR + LUFTWIRBEL ───
 function initCursor(){
   if(!matchMedia('(hover:hover)').matches || window.innerWidth<=768) return;
-  const cur=document.getElementById('whip-cursor');
+  const cur=document.getElementById('broom-cursor');
   if(!cur)return;
+
+  // Trail-Partikel-Pool
+  const POOL_SIZE=25;
+  const pool=[];
+  for(let i=0;i<POOL_SIZE;i++){
+    const el=document.createElement('span');
+    el.className='whip-trail';
+    document.body.appendChild(el);
+    pool.push(el);
+  }
+  let poolIdx=0,lastEmit=0;
+
+  function emitTrail(x,y){
+    const now=performance.now();
+    if(now-lastEmit<28)return;
+    lastEmit=now;
+    const el=pool[poolIdx];
+    poolIdx=(poolIdx+1)%POOL_SIZE;
+    if(el._anim)el._anim.cancel();
+    el.style.left=x+'px';
+    el.style.top=y+'px';
+    const angle=Math.random()*Math.PI*2;
+    const dist=18+Math.random()*22;
+    const dx=Math.cos(angle)*dist;
+    const dy=Math.sin(angle)*dist-8; // leichter Aufwärts-Bias
+    const rot=(Math.random()-.5)*360;
+    const size=.6+Math.random()*.5;
+    el._anim=el.animate([
+      {opacity:.7,transform:`scale(${size*.35}) rotate(0deg)`},
+      {opacity:0,transform:`translate(${dx}px,${dy}px) scale(${size*1.7}) rotate(${rot}deg)`}
+    ],{duration:650+Math.random()*350,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
+  }
+
   let mx=0,my=0,raf=null;
   document.addEventListener('mousemove',e=>{
     mx=e.clientX;my=e.clientY;
+    emitTrail(mx,my);
     if(raf)return;
     raf=requestAnimationFrame(()=>{
       cur.style.transform=`translate(${mx-4}px, ${my-4}px)`;

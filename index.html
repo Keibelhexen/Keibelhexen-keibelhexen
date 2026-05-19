@@ -3,1007 +3,432 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Keibelhexen Huchenfeld</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --ink:#06090f;--ink2:#0c1220;--ink3:#111d30;
-  --b:#1a4a8a;--b2:#2563eb;--b3:#60a5fa;--b4:#bfdbfe;
-  --w:#f0f6ff;--g:#64748b;--dim:#1e3358;
-  --pad:clamp(1.5rem,5vw,4rem);--max:1400px
-}
-html{scroll-behavior:smooth}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--ink);color:var(--w);overflow-x:hidden}
-#confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1}
-#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--b2),var(--b3));z-index:200;width:0%}
-#loader{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:var(--b);color:#fff;padding:.45rem 1.1rem;border-radius:20px;font-size:.76rem;font-weight:700;z-index:250;display:none;align-items:center;gap:.55rem;white-space:nowrap}
-.spin{width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+<meta name="theme-color" content="#0E1230">
+<title>Keibelhexen Huchenfeld · Schwäbisch-Alemannische Fasnet</title>
+<meta name="description" content="Die Keibelhexen aus Huchenfeld – Schwäbisch-Alemannische Fasnet, Häs, Larve und die Sage rund um Hugi, die Hexe aus dem Marterweibleswald.">
 
-/* HEXENBESEN CURSOR + LUFTWIRBEL */
-#broom-cursor{position:fixed;top:0;left:0;width:80px;height:80px;pointer-events:none;z-index:9999;display:none;will-change:transform;transition:opacity .15s}
-#broom-cursor svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 10px rgba(0,0,0,.55))}
-.whip-trail{position:fixed;pointer-events:none;z-index:9998;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle,rgba(220,235,255,.55) 0%,rgba(96,165,250,.35) 35%,rgba(37,99,235,.15) 65%,transparent 100%);margin:-7px 0 0 -7px;opacity:0;will-change:transform,opacity;filter:blur(.6px)}
-@media(hover:hover) and (min-width:769px){
-  #broom-cursor{display:block}
-  body{cursor:none}
-  a,button,.gi,.fc,.zk-card,.lk-list a,.btn,[onclick],label,.koi a{cursor:none}
-  input,textarea,select{cursor:text!important}
-}
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--pad);border-bottom:1px solid transparent;transition:background .4s}
-nav.sc{background:rgba(6,9,15,.92);backdrop-filter:blur(16px);border-color:var(--dim)}
-.nl{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--w)}
-.nl img{height:36px;filter:drop-shadow(0 0 8px rgba(96,165,250,.5))}
-.nl-ph{width:32px;height:32px;border-radius:50%;background:var(--ink3);border:1px solid var(--dim);display:flex;align-items:center;justify-content:center;font-size:.95rem}
-.nl-name{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.85}
-.nm{list-style:none;display:flex;gap:.1rem}
-.nm a{color:rgba(240,246,255,.55);text-decoration:none;padding:.4rem .65rem;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;transition:color .2s;border-radius:4px}
-.nm a:hover{color:var(--w);background:rgba(255,255,255,.05)}
-.hbg{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none}
-.hbg span{display:block;width:22px;height:2px;background:var(--w);border-radius:2px;transition:all .3s}
-.hbg.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
-.hbg.open span:nth-child(2){opacity:0}
-.hbg.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
-.nm.open{display:flex!important;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:rgba(6,9,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--dim);padding:1rem;gap:.2rem;z-index:99}
-.nm.open a{padding:.75rem 1rem;border-radius:6px;font-size:.9rem}
-
-/* HERO */
-#home{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding-top:60px}
-.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,.07) 1px,transparent 1px);background-size:50px 50px;animation:gmove 20s linear infinite}
-@keyframes gmove{to{background-position:50px 50px}}
-.hglow{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:min(700px,120vw);height:min(700px,120vw);border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.12),transparent 65%);pointer-events:none}
-.hcheck{position:absolute;bottom:0;left:0;right:0;height:6px;background-image:repeating-conic-gradient(var(--b) 0% 25%,var(--w) 0% 50%);background-size:6px 6px;opacity:.6}
-.hc{position:relative;z-index:2;text-align:center;padding:2rem var(--pad);max-width:900px;width:100%}
-#hlogo{margin-bottom:1.8rem;display:flex;justify-content:center}
-#hlogo img{width:clamp(120px,25vw,180px);height:clamp(120px,25vw,180px);object-fit:contain;filter:drop-shadow(0 0 40px rgba(37,99,235,.5));animation:fl 6s ease-in-out infinite}
-@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.lph{width:clamp(120px,25vw,180px);height:clamp(120px,25vw,180px);background:var(--ink3);border:1px dashed var(--dim);border-radius:16px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.4rem;color:var(--g);font-size:.75rem;margin:0 auto}
-.htag{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--b3);margin-bottom:1rem;animation:fup .8s .3s both}
-.hbig{font-size:clamp(3rem,15vw,11rem);font-weight:900;line-height:.88;letter-spacing:-.04em;overflow:hidden}
-.hbig span{display:block;animation:sup .9s ease both}
-.hbig span:nth-child(1){animation-delay:.5s}
-.hbig span:nth-child(2){animation-delay:.65s;color:var(--b3)}
-.hsub{font-size:clamp(.85rem,2.5vw,1.1rem);color:var(--g);letter-spacing:.04em;margin-top:1.2rem;font-style:italic;line-height:1.6;animation:fup .8s 1s both}
-
-/* INTRO VIDEO */
-.intro-wrap{max-width:560px;margin:1.6rem auto 0;border-radius:12px;overflow:hidden;transition:all .35s;animation:fup .8s 1.05s both}
-.intro-wrap[data-state="empty"]{opacity:.2}
-.intro-wrap[data-state="empty"] .intro-hint{font-size:.62rem;color:var(--g);text-align:center;padding:.5rem;letter-spacing:.18em;text-transform:uppercase;border:1px dashed var(--dim);border-radius:8px;background:rgba(12,18,32,.4)}
-.intro-wrap[data-state="loaded"]{box-shadow:0 14px 44px rgba(37,99,235,.3);border:1px solid rgba(96,165,250,.25)}
-.intro-wrap video{width:100%;display:block;background:#000;border-radius:12px;outline:none}
-
-.hbtns{display:flex;gap:.75rem;justify-content:center;margin-top:1.8rem;flex-wrap:wrap;animation:fup .8s 1.2s both}
-@keyframes sup{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(80%)}}
-@keyframes fup{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.scr{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;color:var(--g);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;animation:fup .8s 1.6s both}
-.scrarr{width:1px;height:36px;background:linear-gradient(to bottom,var(--b2),transparent);animation:sp 2s ease-in-out infinite}
-@keyframes sp{0%,100%{opacity:.3;transform:scaleY(.5);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
-
-/* BUTTONS */
-.btn{padding:.7rem 1.8rem;border-radius:6px;font-weight:700;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .25s;font-family:inherit;cursor:pointer;white-space:nowrap}
-.bp{background:var(--b2);color:#fff}.bp:hover{background:#1d4ed8;transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,.4)}
-.bo{background:transparent;color:var(--w);border:1px solid rgba(255,255,255,.25)}.bo:hover{border-color:var(--b3);color:var(--b3);transform:translateY(-2px)}
-
-/* SECTIONS */
-.si{max-width:var(--max);margin:0 auto;padding:6rem var(--pad)}
-.sn{font-size:clamp(4rem,10vw,11rem);font-weight:900;color:rgba(255,255,255,.03);line-height:1;letter-spacing:-.05em;margin-bottom:-1.5rem;user-select:none}
-.st{font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--b3);margin-bottom:.6rem}
-.sh{font-size:clamp(1.8rem,4vw,3.6rem);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin-bottom:.6rem}
-.sl{width:40px;height:2px;background:var(--b2);margin-bottom:2.5rem;border-radius:2px}
-.rv{opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s}
-.rv.on{opacity:1;transform:none}
-
-/* ÜBER UNS */
-#uu{background:var(--ink2)}
-.aug{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
-.aup p{color:var(--g);line-height:1.85;font-size:.97rem;margin-bottom:1rem}
-.hae{margin-top:1.8rem;padding:1.4rem;border-left:3px solid var(--b2);background:rgba(37,99,235,.06);border-radius:0 8px 8px 0}
-.hae h3{font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--b3);margin-bottom:.5rem}
-.hae p{color:var(--g);font-size:.88rem;line-height:1.8}
-.auimg{position:relative;aspect-ratio:4/5;background:var(--ink3);border:1px solid var(--dim);overflow:hidden;border-radius:8px}
-.auimg img{width:100%;height:100%;object-fit:cover;display:none}
-.auiph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--g);font-size:.8rem}
-.cc{position:absolute;bottom:0;right:0;width:60px;height:60px;background-image:repeating-conic-gradient(var(--b) 0% 25%,transparent 0% 50%);background-size:12px 12px;opacity:.4}
-
-/* MASKE Subgrid (Über uns) */
-.maske-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;align-items:start}
-
-/* ZIRKEL */
-#zirkel{background:var(--ink)}
-.zk-intro{max-width:820px;margin-bottom:3rem}
-.zk-intro p{color:var(--g);line-height:1.9;font-size:.97rem;margin-bottom:1rem}
-.zk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.2rem}
-.zk-card{background:var(--ink3);border:1px solid var(--dim);border-radius:8px;overflow:hidden;transition:border-color .3s,transform .3s}
-.zk-card:hover{border-color:var(--b2);transform:translateY(-3px)}
-.zk-img{aspect-ratio:1;background:var(--ink2);overflow:hidden;position:relative}
-.zk-img img{width:100%;height:100%;object-fit:cover;display:block}
-.zk-imgph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--g);gap:.3rem;font-size:.7rem;padding:.5rem;text-align:center}
-.zk-imgph span:first-child{font-size:2rem}
-.zk-info{padding:.9rem 1rem;text-align:center}
-.zk-name{font-size:1rem;font-weight:800;letter-spacing:-.01em;color:var(--w)}
-.zk-role{font-size:.7rem;color:var(--b3);letter-spacing:.08em;margin-top:.25rem;text-transform:uppercase;font-weight:700}
-.zk-subtitle{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--b3);margin:3rem 0 1.2rem;padding-bottom:.6rem;border-bottom:1px solid var(--dim)}
-.zk-grid-medien{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,260px));gap:1.2rem;justify-content:center}
-
-/* GESCHICHTE */
-.gesch-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
-.gesch-text p{color:var(--g);line-height:1.9;font-size:.93rem;margin-bottom:1rem}
-.gesch-quote{background:var(--ink3);border-left:3px solid var(--b2);padding:1.5rem;border-radius:0 8px 8px 0;margin-bottom:1.5rem}
-.gesch-quote-t{color:var(--b3);font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
-.gesch-quote-s{color:var(--g);font-size:.95rem;font-style:italic}
-.gesch-sage{background:rgba(37,99,235,.08);border:1px solid var(--dim);border-radius:8px;padding:1.4rem;margin-top:1.5rem}
-.gesch-aside{position:sticky;top:80px}
-.gesch-img-wrap{background:var(--ink3);border:1px solid var(--dim);border-radius:8px;overflow:hidden;aspect-ratio:3/4}
-.gesch-img-wrap img{width:100%;height:100%;object-fit:cover}
-.gesch-aside-caption{color:var(--g);font-size:.75rem;text-align:center;margin-top:.75rem;font-style:italic}
-
-/* TERMINE */
-#tr{background:var(--ink)}
-.calf{border-radius:12px;overflow:hidden;border:1px solid var(--dim)}
-.calf iframe{width:100%;height:clamp(400px,60vh,580px);border:none;display:block;filter:invert(1) hue-rotate(190deg) saturate(.8) brightness(.9)}
-
-/* GALERIE */
-#ga{background:var(--ink2);overflow:hidden}
-.ga-wrap{position:relative}
-.gastrip{display:flex;gap:1.2rem;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;padding-bottom:.5rem;scroll-behavior:smooth}
-.gastrip::-webkit-scrollbar{display:none}
-.gastrip:active{cursor:grabbing}
-.gi{flex:0 0 clamp(240px,70vw,340px);height:clamp(280px,45vw,420px);scroll-snap-align:start;background:var(--ink3);border:1px solid var(--dim);overflow:hidden;position:relative;transition:transform .3s;border-radius:8px}
-.gi:hover{transform:translateY(-5px)}
-.gi img{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:transform .5s}
-.gi:hover img{transform:scale(1.04)}
-.giph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--g);font-size:.8rem}
-.ga-arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(6,9,15,.85);backdrop-filter:blur(8px);border:1px solid var(--dim);color:var(--w);font-size:1.6rem;font-weight:700;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s,transform .2s;z-index:5;line-height:1;padding:0;font-family:inherit}
-.ga-arrow:hover{background:var(--b2);border-color:var(--b2);transform:translateY(-50%) scale(1.08)}
-.ga-arrow:active{transform:translateY(-50%) scale(.96)}
-.ga-prev{left:.4rem}
-.ga-next{right:.4rem}
-.ga-hint{color:var(--g);font-size:.8rem;letter-spacing:.05em;margin-top:.75rem;text-align:center}
-
-/* FLYER */
-#fl{background:var(--ink)}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(150px,40vw,200px),1fr));gap:1.2rem}
-.fc{background:var(--ink3);border:1px solid var(--dim);overflow:hidden;cursor:pointer;transition:transform .3s,border-color .3s;border-radius:8px}
-.fc:hover{transform:translateY(-4px);border-color:var(--b2)}
-.fc:hover .fov{opacity:1}
-.fp{aspect-ratio:3/4;background:var(--ink2);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-.fp img{width:100%;height:100%;object-fit:cover}
-.fov{position:absolute;inset:0;background:rgba(0,0,0,.65);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;opacity:0;transition:opacity .25s}
-.fov span{font-size:.78rem;font-weight:700;text-transform:uppercase;color:#fff;letter-spacing:.08em}
-.finfo{padding:.9rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-.finfo h3{font-size:.82rem;font-weight:700;word-break:break-word;line-height:1.3}
-.ftype{font-size:.72rem;color:var(--b3);white-space:nowrap;flex-shrink:0}
-
-/* LINKS */
-.lk-cat{margin-bottom:2.5rem}
-.lk-cat:last-child{margin-bottom:0}
-.lk-cat-title{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--b3);margin-bottom:.4rem;padding-bottom:.6rem;border-bottom:1px solid var(--dim)}
-.lk-list{list-style:none}
-.lk-list li{border-bottom:1px solid var(--dim)}
-.lk-list li:last-child{border-bottom:none}
-.lk-list a{display:flex;align-items:center;justify-content:space-between;padding:.85rem 0;color:var(--w);text-decoration:none;font-size:.92rem;font-weight:600;transition:color .2s,padding .2s;gap:1rem}
-.lk-list a:hover{color:var(--b3);padding-left:.4rem}
-.lk-list a .arr{color:var(--b3);font-size:.85rem;flex-shrink:0;font-weight:400}
-
-/* KONTAKT */
-#ko{background:var(--ink)}
-.kog{display:grid;grid-template-columns:1fr 1.3fr;gap:4rem;align-items:start}
-.koi{display:flex;align-items:center;gap:.9rem;margin-bottom:1.3rem;color:var(--g)}
-.koic{width:40px;height:40px;border:1px solid var(--dim);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
-.koi a{color:var(--b3);text-decoration:none;font-size:.92rem}.koi a:hover{text-decoration:underline}
-.koi span{font-size:.92rem}
-.kof{background:var(--ink3);border:1px solid var(--dim);padding:2rem;border-radius:12px}
-.fg{margin-bottom:1.1rem}
-.fg label{display:block;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-bottom:.45rem}
-.fg input,.fg textarea{width:100%;padding:.7rem .95rem;background:var(--ink2);border:1px solid var(--dim);color:var(--w);font-family:inherit;font-size:.9rem;outline:none;transition:border-color .2s;border-radius:6px}
-.fg input:focus,.fg textarea:focus{border-color:var(--b2)}
-.fg textarea{min-height:110px;resize:vertical}
-
-/* FOOTER */
-footer{background:var(--ink2);border-top:1px solid var(--dim);padding:3.5rem var(--pad)}
-.foi{max-width:var(--max);margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:1.4rem}
-.fobig{font-size:clamp(2rem,6vw,4.5rem);font-weight:900;letter-spacing:-.03em;opacity:.05;text-transform:uppercase}
-.foline{width:100%;height:1px;background:var(--dim)}
-.forow{display:flex;justify-content:space-between;align-items:center;width:100%;flex-wrap:wrap;gap:1rem}
-.soc{display:flex;gap:.6rem}
-.soc a{width:40px;height:40px;border:1px solid var(--dim);border-radius:8px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1rem;transition:all .2s}
-.soc a:hover{border-color:var(--b2);background:rgba(37,99,235,.18)}
-.focopy{font-size:.78rem;color:var(--g)}
-
-/* LIGHTBOX */
-.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:400;flex-direction:column;align-items:center;justify-content:center}
-.lb.on{display:flex}
-.lbx{position:absolute;top:1rem;right:1.2rem;color:#fff;font-size:1.6rem;cursor:pointer;background:rgba(255,255,255,.1);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .2s}
-.lbx:hover{background:rgba(255,255,255,.22)}
-.lbcnt{position:absolute;top:1.2rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:.8rem;letter-spacing:.1em}
-.lbtrack{position:relative;width:100vw;flex:1;overflow:hidden;min-height:0}
-.lbslides{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
-.lbslide{flex:0 0 100vw;width:100vw;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:1rem clamp(1rem,8vw,5rem)}
-.lbslide img{max-width:100%;max-height:85%;object-fit:contain;border-radius:8px;display:block}
-.lbslide iframe{width:min(820px,92vw);height:85%;border:none;border-radius:8px;background:#fff}
-.lbdl{color:var(--b3);text-decoration:none;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--b3);padding:.4rem 1.1rem;border-radius:6px;transition:all .2s;flex-shrink:0}
-.lbdl:hover{background:var(--b3);color:#fff}
-.lbnav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:none;color:#fff;font-size:1.5rem;width:46px;height:46px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:5}
-.lbnav:hover{background:rgba(255,255,255,.26)}
-.lbprev{left:1rem}.lbnext{right:1rem}
-.lbdots{display:flex;gap:.5rem;justify-content:center;padding:.6rem 0;flex-shrink:0}
-.lbdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.28);cursor:pointer;transition:background .2s}
-.lbdot.on{background:var(--b3)}
-.toast{position:fixed;bottom:1.5rem;right:1.2rem;background:var(--b);color:#fff;padding:.55rem 1.1rem;font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;z-index:999;border-radius:6px;box-shadow:0 4px 20px rgba(0,0,0,.5);animation:fup .3s ease;pointer-events:none}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-  .nm{display:none}.hbg{display:flex}
-  .aug{grid-template-columns:1fr;gap:2rem}
-  .aug .auimg{aspect-ratio:auto;order:-1;min-height:240px}
-  .aug .auimg img{height:auto;max-height:75vh;object-fit:contain}
-  .maske-grid{grid-template-columns:1fr;gap:1.5rem}
-  .gesch-grid{grid-template-columns:1fr;gap:2rem}
-  .gesch-aside{position:static;order:-1;max-width:320px;margin:0 auto;width:100%}
-  .kog{grid-template-columns:1fr;gap:2rem}
-  .si{padding:4rem 1.4rem}
-  #ga .si{padding-bottom:1rem}
-  .hbtns{flex-direction:column;align-items:center}
-  .hbtns .btn{width:min(280px,80vw);justify-content:center}
-  .gastrip{padding:0 1.4rem .5rem;scroll-snap-type:x mandatory}
-  .ga-arrow{width:38px;height:38px;font-size:1.3rem}
-  .ga-prev{left:.3rem}
-  .ga-next{right:.3rem}
-  .fgrid{grid-template-columns:repeat(2,1fr)}
-  .zk-grid{grid-template-columns:repeat(2,1fr);gap:.9rem}
-  .zk-grid-medien{grid-template-columns:minmax(0,1fr);max-width:240px;margin:0 auto}
-  .lbnav{display:none}
-  .forow{flex-direction:column;align-items:center;text-align:center}
-  #confetti{display:none}
-}
-@media(max-width:480px){
-  .fgrid{grid-template-columns:1fr}
-}
-@media(min-width:1200px){html{font-size:17px}}
-@media(min-width:1600px){html{font-size:18px}}
-@media(min-width:1400px){
-  :root{--pad:5rem}
-  .gi{flex:0 0 380px;height:460px}
-}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<!-- HEXENBESEN CURSOR -->
+<!-- BROOM CURSOR -->
 <div id="broom-cursor" aria-hidden="true">
   <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <linearGradient id="bs" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#b87a3e"/>
-        <stop offset="55%" stop-color="#7a4520"/>
-        <stop offset="100%" stop-color="#4a2a0e"/>
+        <stop offset="0%" stop-color="#6F84AB"/>
+        <stop offset="55%" stop-color="#1B2247"/>
+        <stop offset="100%" stop-color="#050B3A"/>
       </linearGradient>
     </defs>
-
-    <!-- Stiel-Schatten -->
-    <line x1="10" y1="10" x2="115" y2="115" stroke="#000" stroke-width="9" stroke-linecap="round" opacity=".4"/>
-    <!-- Stiel -->
+    <line x1="10" y1="10" x2="115" y2="115" stroke="#050B3A" stroke-width="9" stroke-linecap="round" opacity=".45"/>
     <line x1="10" y1="10" x2="115" y2="115" stroke="url(#bs)" stroke-width="7" stroke-linecap="round"/>
-    <!-- Stiel-Glanz -->
-    <line x1="12" y1="11" x2="113" y2="112" stroke="#d8a868" stroke-width="1.5" stroke-linecap="round" opacity=".75"/>
-
-    <!-- Bindung (Lederband) -->
+    <line x1="12" y1="11" x2="113" y2="112" stroke="#2C45A8" stroke-width="1.5" stroke-linecap="round" opacity=".8"/>
     <g transform="rotate(45 120 120)">
-      <ellipse cx="120" cy="120" rx="10" ry="15" fill="#1f1004" stroke="#3a2008" stroke-width="1"/>
+      <ellipse cx="120" cy="120" rx="10" ry="15" fill="#0E1230" stroke="#1B2247" stroke-width="1"/>
       <line x1="111" y1="118" x2="129" y2="118" stroke="#000" stroke-width="1.2" opacity=".55"/>
       <line x1="111" y1="123" x2="129" y2="123" stroke="#000" stroke-width="1.2" opacity=".55"/>
     </g>
-
-    <!-- Borsten Schicht 1 (hinten, dunkel) -->
-    <g stroke-linecap="round" fill="none" stroke="#3a2008" stroke-width="2.8">
-      <line x1="124" y1="124" x2="155" y2="195"/>
-      <line x1="125" y1="125" x2="180" y2="188"/>
-      <line x1="127" y1="127" x2="195" y2="170"/>
-      <line x1="128" y1="128" x2="196" y2="140"/>
-      <line x1="128" y1="128" x2="195" y2="112"/>
-      <line x1="126" y1="126" x2="178" y2="96"/>
+    <g stroke-linecap="round" fill="none" stroke="#1B2247" stroke-width="2.8">
+      <line x1="124" y1="124" x2="155" y2="195"/><line x1="125" y1="125" x2="180" y2="188"/>
+      <line x1="127" y1="127" x2="195" y2="170"/><line x1="128" y1="128" x2="196" y2="140"/>
+      <line x1="128" y1="128" x2="195" y2="112"/><line x1="126" y1="126" x2="178" y2="96"/>
       <line x1="125" y1="125" x2="155" y2="92"/>
     </g>
-
-    <!-- Borsten Schicht 2 (mittel) -->
-    <g stroke-linecap="round" fill="none" stroke="#8b5a25" stroke-width="2.2">
-      <line x1="125" y1="125" x2="145" y2="190"/>
-      <line x1="126" y1="126" x2="168" y2="184"/>
-      <line x1="128" y1="128" x2="188" y2="158"/>
-      <line x1="128" y1="128" x2="188" y2="125"/>
-      <line x1="127" y1="127" x2="170" y2="103"/>
-      <line x1="126" y1="126" x2="148" y2="100"/>
+    <g stroke-linecap="round" fill="none" stroke="#3C4F7C" stroke-width="2.2">
+      <line x1="125" y1="125" x2="145" y2="190"/><line x1="126" y1="126" x2="168" y2="184"/>
+      <line x1="128" y1="128" x2="188" y2="158"/><line x1="128" y1="128" x2="188" y2="125"/>
+      <line x1="127" y1="127" x2="170" y2="103"/><line x1="126" y1="126" x2="148" y2="100"/>
     </g>
-
-    <!-- Borsten Schicht 3 (vorn, hell) -->
-    <g stroke-linecap="round" fill="none" stroke="#caa860" stroke-width="1.5">
-      <line x1="126" y1="126" x2="148" y2="178"/>
-      <line x1="127" y1="127" x2="170" y2="170"/>
-      <line x1="128" y1="128" x2="180" y2="146"/>
-      <line x1="128" y1="128" x2="178" y2="118"/>
+    <g stroke-linecap="round" fill="none" stroke="#6F84AB" stroke-width="1.5">
+      <line x1="126" y1="126" x2="148" y2="178"/><line x1="127" y1="127" x2="170" y2="170"/>
+      <line x1="128" y1="128" x2="180" y2="146"/><line x1="128" y1="128" x2="178" y2="118"/>
       <line x1="127" y1="127" x2="158" y2="106"/>
     </g>
   </svg>
 </div>
 
-<canvas id="confetti"></canvas>
 <div id="prog"></div>
-<div id="loader"><div class="spin"></div><span>Lade Bilder…</span></div>
+<div id="loader"><div class="spin"></div><span>Lade…</span></div>
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="#home" class="nl">
-    <div id="navlogo"><div class="nl-ph">🧙</div></div>
-    <span class="nl-name">Keibelhexen Huchenfeld</span>
-  </a>
-  <ul class="nm" id="navlinks">
-    <li><a href="#uu">Über uns</a></li>
-    <li><a href="#zirkel">Zirkel</a></li>
-    <li><a href="#geschichte">Geschichte</a></li>
-    <li><a href="#fl">Flyer</a></li>
-    <li><a href="#tr">Termine</a></li>
-    <li><a href="#ga">Galerie</a></li>
-    <li><a href="#links">Links</a></li>
-    <li><a href="#ko">Kontakt</a></li>
-  </ul>
-  <button class="hbg" id="hbg" onclick="tmenu()"><span></span><span></span><span></span></button>
-</nav>
+<!-- PAGE-WIDE CONFETTI (left & right edges, falling top→bottom) -->
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+
+<!-- UTILITY BAR -->
+<div class="utility">
+  <div class="wrap row">
+    <div><a href="mailto:keibelhexen@gmx.de">keibelhexen@gmx.de</a> · <a href="https://www.instagram.com/keibelhexen_huchenfeld" id="instaTop" target="_blank">@keibelhexen_huchenfeld</a></div>
+    <span class="schlachtruf">Keibel Gurruh!</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site" id="hdr">
+  <div class="wrap row">
+    <a href="#home" class="brand">
+      <div class="mark" id="navMark">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="color:#F1ECDD">
+          <path d="M12 2c-1.5 0-3 1-3 3 0 .5 0 1 .3 1.5L6 11c-.5.8-1 1.7-1 2.5v2c0 1 .5 2 1 2.5L4 19v3h16v-3l-2-1c.5-.5 1-1.5 1-2.5v-2c0-.8-.5-1.7-1-2.5l-3.3-4.5C14.8 6 15 5.5 15 5c0-2-1.5-3-3-3z"/>
+        </svg>
+      </div>
+      <div class="name">Keibelhexen<small>Huchenfeld · Seit 2008</small></div>
+    </a>
+    <nav class="main" id="nav">
+      <ul>
+        <li><a href="#uu">Verein</a></li>
+        <li><a href="#tr">Termine</a></li>
+        <li><a href="#sage">Sage</a></li>
+        <li><a href="#zirkel">Zirkel</a></li>
+        <li><a href="#ga">Galerie</a></li>
+        <li><a href="#fl">Flyer</a></li>
+        <li><a href="#ko">Kontakt</a></li>
+      </ul>
+    </nav>
+    <button class="hbg" id="hbg" onclick="tmenu()" aria-label="Menü"><span></span><span></span><span></span></button>
+  </div>
+</header>
 
 <!-- HERO -->
-<section id="home">
-  <div class="hgrid"></div><div class="hglow"></div><div class="hcheck"></div>
-  <div class="hc">
-    <div id="hlogo">
-      <div class="lph" id="hlph">🧙‍♀️<span style="font-size:.7rem;color:var(--g)">Logo → images/logo/</span></div>
+<section class="hero" id="home" data-screen-label="01 Hero">
+  <div class="photo" id="heroPhoto"></div>
+  <div class="veil"></div>
+  <div class="wrap">
+    <p class="eye">Schwäbisch-Alemannische Fasnet · Huchenfeld</p>
+    <h1>
+      <span class="keibel">Keibel</span>
+      <span class="hexen">Hexen</span>
+      <span class="by">Närrisch seit 2008</span>
+    </h1>
+    <p class="schlachtruf">„Die schenschde Hexe' uff derre Welt, sen' d' Keibelhexe' aus Huchenfeld"</p>
+    <div class="ctas">
+      <a href="#tr" class="btn primary">Termine ansehen →</a>
+      <a href="#sage" class="btn secondary">Die Sage lesen</a>
     </div>
-    <p class="htag">✦ Pforzheim · Huchenfeld ✦</p>
-    <h1 class="hbig"><span>KEIBEL</span><span>HEXEN</span></h1>
-    <p class="hsub">„Die schenschde Hexe' uff derre Welt, sen' d' Keibelhexe' aus Huchenfeld"</p>
-
-    <!-- INTRO VIDEO – Datei in images/intro/ ablegen (z.B. intro.mp4) -->
-    <div id="introVideoWrap" class="intro-wrap" data-state="empty">
-      <div class="intro-hint">Intro folgt</div>
+    <div class="dates">
+      <div class="d-item"><b data-date-target="elf" data-date-fmt="full">11.11.2026</b><span>Erwachen der Hugi</span></div>
+      <div class="d-sep"></div>
+      <div class="d-item"><b data-date-target="schmotz" data-date-fmt="full">04.02.2027</b><span>Schmotziger Donnerstag</span></div>
+      <div class="d-sep"></div>
+      <div class="d-item"><b data-date-target="ash" data-date-fmt="full">10.02.2027</b><span>Aschermittwoch</span></div>
     </div>
-
-    <div class="hbtns">
-      <a href="#tr" class="btn bp">📅 Termine ansehen</a>
-      <a href="#ga" class="btn bo">📸 Galerie</a>
-    </div>
+    <div class="intro-card" id="introVideoWrap" data-state="empty"></div>
   </div>
-  <div class="scr"><span>Scroll</span><div class="scrarr"></div></div>
 </section>
 
 <!-- ÜBER UNS -->
-<section id="uu" style="padding:0;background:var(--ink2)">
-  <div class="si">
-    <div class="aug">
+<section class="section" id="uu" data-screen-label="02 Verein">
+  <div class="wrap">
+    <div class="s-num">01</div>
+    <div class="split">
+      <div class="split-text">
+        <div class="s-head">
+          <span class="eyebrow rv">Tradition & Häs</span>
+          <h2 class="section-title rv">Über die <em>Keibelhexen</em></h2>
+          <p class="section-lead rv">Wir sind eine Faschingsgemeinde aller Altersstufen – aus einer kleinen Gruppe Jazztänzerinnen geworden, heute eine Familie, die im ganzen Schwarzwald-Vorland für den Schabernack sorgt.</p>
+        </div>
+        <p class="rv">Die Ursprünge der Huche'felder Keibelhexe' gehen in das Jahr <strong>2004</strong> zurück. Begonnen hat es mit einer kleinen Gruppe von Jazztänzerinnen, die aus ihrer Leidenschaft die Gruppe samt Häs kreiert haben.</p>
+        <p class="rv">Seit <strong>2008</strong> sind wir eine wachsende Faschingsgemeinde und Familie aller Altersstufen, die mit viel Freude und Begeisterung in der fünften Jahreszeit bei Umzügen und sonstigen Veranstaltungen ihren großartigen Teil des Schabernacks beitragen.</p>
+        <p class="rv">Jedes Jahr läuten wir am „Schmotzigen" Donnerstag die fünfte Jahreszeit ein: Mit lautem Einmarsch auf dem Rathausplatz übernehmen wir das Huchenfelder Rathaus und entführen die Ortsvorsteherin. Bis Aschermittwoch haben die Narren die Rathausherrschaft inne!</p>
+      </div>
       <div>
-        <div class="sn rv">01</div>
-        <div class="st rv">Tradition & Häs</div>
-        <h2 class="sh rv">Über die<br>Keibelhexen</h2>
-        <div class="sl rv"></div>
-        <p class="rv" style="color:var(--g);line-height:1.9;font-size:.97rem;margin-bottom:1rem">Die Ursprünge der Huche'felder Keibelhexe' gehen in das Jahr 2004 zurück. Begonnen hat es mit einer kleinen Gruppe von Jazztänzerinnen, die aus ihrer Leidenschaft die Gruppe samt Häs kreiert haben.</p>
-        <p class="rv" style="color:var(--g);line-height:1.9;font-size:.97rem;margin-bottom:1rem">Seit 2008 sind wir eine wachsende Faschingsgemeinde und Familie aller Altersstufen, die mit viel Freude und Begeisterung in der fünften Jahreszeit bei Umzügen und sonstigen Veranstaltungen ihren großartigen Teil des Schabernacks beitragen.</p>
-        <p class="rv" style="color:var(--g);line-height:1.9;font-size:.97rem;margin-bottom:1rem">Jedes Jahr läuten wir am „Schmotzigen" Donnerstag die fünfte Jahreszeit ein: Mit lautem Einmarsch auf dem Rathausplatz übernehmen wir das Huchenfelder Rathaus und entführen die Ortsvorsteherin. Bis Aschermittwoch haben die Narren die Rathausherrschaft inne!</p>
-        <div class="hae rv">
-          <h3>Das Häs</h3>
-          <p style="color:var(--g);font-size:.88rem;line-height:1.8">Unser Erkennungszeichen ist das schwarz-blau karierte Häs – das traditionelle Kostüm der Keibelhexen. Mit der charakteristischen Holzmaske, den markanten Zügen, dem langen gelben Schnabel und dem wallenden weißen Haar sind wir in der ganzen Region unverwechselbar.</p>
-        </div>
-
-        <!-- MASKE -->
-        <div class="rv" style="margin-top:1.5rem">
-          <div style="font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--b3);margin-bottom:.8rem">Die Maske</div>
-          <div class="maske-grid">
-            <div>
-              <p style="color:var(--g);font-size:.88rem;line-height:1.8">Das Herzstück unseres Häs ist die handgeschnitzte Holzmaske – ein unverkennbares Kunstwerk mit dem charakteristischen langen gelben Schnabel, den markanten Zügen und dem wallenden weißen Haar. Jede Maske ist ein Unikat und wird mit großer Sorgfalt gefertigt.</p>
-            </div>
-            <div id="maskeImgWrap" style="background:var(--ink2);border:1px solid var(--dim);border-radius:8px;overflow:hidden;aspect-ratio:1">
-              <div id="maskeImgPh" style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--g);font-size:.78rem;padding:1rem;text-align:center">
-                🎭<span>Maskenbild hochladen:<br><strong>images/maske/</strong></span>
-              </div>
-              <img id="maskeImgEl" src="" alt="Keibelhexen Maske Rohling" style="width:100%;height:100%;object-fit:cover;display:none">
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="auimg rv">
-        <img id="auimg" src="" alt="Keibelhexen">
-        <div class="auiph" id="auiph">📷<span>Bild → images/ueber-uns/</span></div>
-        <div class="cc"></div>
+        <figure class="split-frame haes-frame rv">
+          <img id="haesImg" src="images/ueber-uns/Keibelhexen_0456.jpg" alt="Das Häs der Keibelhexen" loading="lazy">
+          <figcaption>Das Häs</figcaption>
+        </figure>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- WER WIR SIND / ZIRKEL -->
-<section id="zirkel" style="padding:0;background:var(--ink)">
-  <div class="si">
-    <div class="sn rv">02</div>
-    <div class="st rv">Der Zirkel</div>
-    <h2 class="sh rv">Wer wir sind</h2>
-    <div class="sl rv"></div>
-
-    <div class="zk-intro rv">
-      <p>Damit bei uns zwischen Konfetti und Polonäse alles rundläuft, haben wir sieben Verantwortliche, die die Fäden fest in der Hand halten. Wir glauben an verteilte Verantwortung statt starrer Hierarchien – denn gemeinsam schunkelt es sich einfach besser!</p>
-      <p>Intern nennen wir unsere Truppe die Zirkel. Das klingt vielleicht nach einer runden Sache, ist aber vor allem eines: effizient. Sieben Köpfe, die dafür sorgen, dass der Laden läuft und die Party niemals stoppt, ohne dass einer alleine die ganze Last tragen muss.</p>
+    <div class="sub-divider rv">
+      <span class="sub-label">Im Detail</span>
+      <span class="sub-rule"></span>
     </div>
 
-    <div class="zk-grid rv" id="zirkelGrid"></div>
-
-    <div class="zk-subtitle rv">Medienteam</div>
-    <div class="zk-grid-medien rv" id="medienGrid"></div>
-  </div>
-</section>
-
-<!-- GESCHICHTE -->
-<section id="geschichte" style="padding:0;background:var(--ink2)">
-  <div class="si">
-    <div class="sn rv">03</div>
-    <div class="st rv">Die Sage</div>
-    <h2 class="sh rv">Die Geschichte der<br>Keibelhexen</h2>
-    <div class="sl rv"></div>
-    <div class="gesch-grid rv">
-      <div class="gesch-text">
-        <div class="gesch-quote">
-          <p class="gesch-quote-t">Kennt ihr eigentlich die Geschichte, wie die Keibelhexe entstand?</p>
-          <p class="gesch-quote-s">Nein??? Dann hört gut zu…</p>
-        </div>
-        <p>Vor vielen hundert Jahren lebte in Huchenfeld ein altes Weiblein, das <strong style="color:var(--w)">Dorothea Hug</strong> hieß. Dorothea war ein kleines, freundliches und immer hilfsbereites Mütterchen.</p>
-        <p>Eines Tages klopfte ihr Nachbar, Bauer Cuntz, an ihre Tür und fragte: <em>„Hugi, kannst du mal nach meinem Ochsen schauen? Ich glaube, er ist krank."</em> Hugi, wie Dorothea im Dorf genannt wurde, bot natürlich ihre Hilfe an. Mit einem Korb voller Kräuter stapfte sie Tag ein, Tag aus zu dem kranken Ochsen. Sie fütterte ihn mit Wildkräutern und sprach: <em>„Bitte werde wieder gesund, lieber Ochse."</em></p>
-        <p>Leider war das Tier schon viel zu krank. Als der Bauer eines Tages sein totes Tier im Stall entdeckte, war er sehr traurig. Und aus Trauer wurde Hass. Er lief durch die Straßen von Huchenfeld und rief: <em>„Hugi ist eine Hexe! Hugi ist eine Hexe!"</em> Denn irgendjemand musste ja schuld sein.</p>
-        <p>Jeder im Dorf glaubte dem Bauern. Die Bürger schickten eine Brieftaube an den Richter nach Pforzheim – noch am selben Tag wurde Hugi festgenommen und in den Hexenkerker gesperrt. Dort wurde sie gefoltert und bekam nur Wasser und Brot. Aber Hugi war ein zähes und stolzes Weiblein.</p>
-        <p>Nach vier Wochen ließ Richter Casper Späth Hugi frei. Geächtet durfte sie nach Huchenfeld zurückkehren – doch ihr Hof und ihr Haus waren verloren, niemand wollte sie aufnehmen. Deshalb floh Hugi traurig und allein in den <strong style="color:var(--w)">Marterweibleswald</strong>. Dort lebte sie viele lange Jahre mit Wildtauben unter Tannen und Gestrüpp – bis der Kummer das alte Weiblein brach.</p>
-        <div class="gesch-sage">
-          <p style="color:var(--b3);font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem">Die Sage</p>
-          <p style="color:var(--g);line-height:1.8;font-size:.9rem">Jedes Jahr erwacht die Hexe Hugi am <strong style="color:var(--w)">11.11.</strong> in den Laimenlöchern. Sie badet sich bei Vollmond im Schlamm, wälzt sich in Taubenfedern und spukt nachts gurrend in Huchenfeld umher.</p>
-          <p style="color:var(--w);font-size:1rem;font-weight:700;margin-top:1rem;text-align:center;letter-spacing:.05em">Liebe Hugi, dir zu Ehren stehen wir nun hier –<br>als Taube, als Keibelhexe.</p>
-          <p style="color:var(--b3);font-size:1.1rem;font-weight:900;text-align:center;margin-top:.8rem;letter-spacing:.1em">Keibel Gurruh! 🕊️<br>Keibel Gurruh!<br>Keibel Gurruh!</p>
-        </div>
+    <aside class="larve-row rv">
+      <figure class="split-frame larve-frame">
+        <div class="ph" id="larveImgPh" data-svg="witch"></div>
+        <img id="larveImg" alt="Die Larve" style="display:none">
+        <figcaption>Die Larve</figcaption>
+      </figure>
+      <div class="maske-detail">
+        <div class="maske-detail-eye">Unterpunkt · Info</div>
+        <h3>Die Larve</h3>
+        <p>Das <strong>Herzstück</strong> unseres Häs ist die handgeschnitzte Holzlarve – ein unverkennbares Kunstwerk mit dem charakteristischen langen Schnabel, den markanten Zügen und dem wallenden weißen Haar.</p>
+        <p>Jede Larve ist ein <strong>Unikat</strong>, in liebevoller Handarbeit gefertigt von unserem Maskenschnitzer <a class="inline-link" href="#links">Jogi Weiss <span aria-hidden="true">↓</span></a>.</p>
       </div>
-      <div class="gesch-aside">
-        <div class="gesch-img-wrap" id="geschImg">
-          <div id="geschImgPh" style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:var(--g);font-size:.8rem;padding:2rem;text-align:center">
-            📰<span>Zeitungsartikel hochladen:<br><strong>images/geschichte/</strong></span>
-          </div>
-          <img id="geschImgEl" src="" alt="Geschichte der Keibelhexen" style="display:none">
-        </div>
-        <p class="gesch-aside-caption">Auszug aus der Zeitung</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FLYER -->
-<section id="fl" style="padding:0;background:var(--ink)">
-  <div class="si">
-    <div class="sn rv">04</div>
-    <div class="st rv">Downloads</div>
-    <h2 class="sh rv">Flyer &<br>Ankündigungen</h2>
-    <div class="sl rv"></div>
-    <div class="fgrid" id="flgrid"></div>
-    <p id="flempty" style="color:var(--g);font-size:.9rem;margin-top:1rem;display:none">Keine Flyer vorhanden.<br><small>Dateien hochladen: images/flyer/</small></p>
+    </aside>
   </div>
 </section>
 
 <!-- TERMINE -->
-<section id="tr" style="padding:0;background:var(--ink2)">
-  <div class="si">
-    <div class="sn rv">05</div>
-    <div class="st rv">Kalender</div>
-    <h2 class="sh rv">Termine &<br>Veranstaltungen</h2>
-    <div class="sl rv"></div>
-    <div class="calf rv">
+<section class="section section--sunken" id="tr" data-screen-label="03 Termine">
+  <div class="wrap">
+    <div class="s-num">02</div>
+    <div class="s-head">
+      <span class="eyebrow rv" data-campaign-label>Kampagne 2026 / 27</span>
+      <h2 class="section-title rv">Termine der <em>Saison</em></h2>
+      <p class="section-lead rv">Vom Erwachen der Hugi im November bis zur Hexenverbrennung am Aschermittwoch – alle Termine der laufenden Kampagne auf einen Blick.</p>
+    </div>
+
+    <div class="termine-feature">
+      <article class="termine-card rv">
+        <div class="tag">Auftakt der Saison</div>
+        <div class="big-date"><span class="d" data-date-target="elf" data-date-fmt="day">11</span><span class="m" data-date-target="elf" data-date-fmt="month-yy">Nov<br>2026</span></div>
+        <h4>Erwachen der Hugi</h4>
+        <p>Die Hexe Hugi erwacht in den Laimenlöchern – Beginn der fünften Jahreszeit.</p>
+      </article>
+      <article class="termine-card rv">
+        <div class="tag">Höhepunkt</div>
+        <div class="big-date"><span class="d" data-date-target="schmotz" data-date-fmt="day">04</span><span class="m" data-date-target="schmotz" data-date-fmt="month-yy">Feb<br>2027</span></div>
+        <h4>Rathaussturm</h4>
+        <p>Schmotziger Donnerstag: Einmarsch, Sturm auf das Huchenfelder Rathaus, Entführung der Ortsvorsteherin.</p>
+      </article>
+      <article class="termine-card rv">
+        <div class="tag">Abdankung</div>
+        <div class="big-date"><span class="d" data-date-target="ash" data-date-fmt="day">10</span><span class="m" data-date-target="ash" data-date-fmt="month-yy">Feb<br>2027</span></div>
+        <h4>Aschermittwoch</h4>
+        <p>Hexenverbrennung – die Narren geben die Rathausherrschaft zurück.</p>
+      </article>
+    </div>
+
+    <div class="cal-wrap rv">
       <iframe src="https://calendar.google.com/calendar/embed?src=6c2953e0ff6ef354d5012b37de2db23b833f1e0681712bcda1c41d61093359ad%40group.calendar.google.com&ctz=Europe%2FBerlin&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0" frameborder="0" scrolling="no"></iframe>
     </div>
+    <p class="cal-hint">Klick auf einen Termin für mehr Details</p>
+  </div>
+</section>
+
+<!-- HÄS-BAND / SAGE -->
+<section class="haes-band" id="sage" data-screen-label="04 Sage">
+  <div class="wrap">
+    <div class="s-num">03</div>
+    <div class="s-head">
+      <span class="eyebrow rv">Die Sage</span>
+      <h2 class="section-title rv">Wie die <em>Keibelhexe</em> entstand</h2>
+      <p class="section-lead rv">Eine Geschichte aus Huchenfeld – von Dorothea Hug, dem Marterweibleswald und dem Erwachen am 11.11.</p>
+    </div>
+
+    <div class="sage-grid">
+      <div class="sage-text rv">
+        <div class="pull">
+          <div class="l">Hört gut zu …</div>
+          <p>Kennt ihr die Geschichte, wie die Keibelhexe entstand?</p>
+        </div>
+
+        <p class="dropcap">Vor vielen hundert Jahren lebte in Huchenfeld ein altes Weiblein, das <strong>Dorothea Hug</strong> hieß. Dorothea war ein kleines, freundliches und immer hilfsbereites Mütterchen.</p>
+
+        <p>Eines Tages klopfte ihr Nachbar, Bauer Cuntz, an ihre Tür und fragte: <em>„Hugi, kannst du mal nach meinem Ochsen schauen? Ich glaube, er ist krank."</em> Hugi, wie Dorothea im Dorf genannt wurde, bot natürlich ihre Hilfe an. Mit einem Korb voller Kräuter stapfte sie Tag ein, Tag aus zu dem kranken Ochsen. Sie fütterte ihn mit Wildkräutern und sprach: <em>„Bitte werde wieder gesund, lieber Ochse."</em></p>
+
+        <p>Leider war das Tier schon viel zu krank. Als der Bauer eines Tages sein totes Tier im Stall entdeckte, war er sehr traurig. Und aus Trauer wurde Hass.</p>
+
+        <div class="pull">
+          <div class="l">Der Schrei durchs Dorf</div>
+          <p>„Hugi ist eine Hexe!"</p>
+        </div>
+
+        <p>Jeder im Dorf glaubte dem Bauern. Die Bürger schickten eine Brieftaube an den Richter nach Pforzheim – noch am selben Tag wurde Hugi festgenommen und in den <strong>Hexenkerker</strong> gesperrt. Dort wurde sie gefoltert und bekam nur Wasser und Brot. Aber Hugi war ein zähes und stolzes Weiblein.</p>
+
+        <p>Nach vier Wochen ließ Richter Casper Späth Hugi frei. Geächtet durfte sie nach Huchenfeld zurückkehren – doch ihr Hof und ihr Haus waren verloren, niemand wollte sie aufnehmen. Deshalb floh Hugi traurig und allein in den <strong>Marterweibleswald</strong>. Dort lebte sie viele lange Jahre mit Wildtauben unter Tannen und Gestrüpp – bis der Kummer das alte Weiblein brach.</p>
+
+        <div class="sage-final rv" id="sageFinal">
+          <div class="label">Die Sage besagt</div>
+          <p style="font-family:var(--font-serif);color:rgba(241,236,221,.92);font-size:var(--fs-md);line-height:1.65;margin-bottom:18px">Jedes Jahr erwacht die Hexe Hugi am <strong style="color:var(--brand-bone)">11.11.</strong> in den Laimenlöchern. Sie badet sich bei Vollmond im Schlamm, wälzt sich in Taubenfedern und spukt nachts gurrend in Huchenfeld umher.</p>
+          <p class="honor">Liebe Hugi, dir zu Ehren stehen wir nun hier –<br>als Taube, als Keibelhexe.</p>
+          <div class="call">
+            <span>Keibel Gurruh!</span>
+            <span>Keibel Gurruh!</span>
+            <span>Keibel Gurruh!</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="sage-aside rv">
+        <div class="sage-portrait">
+          <div class="ph" id="geschImgPh" data-svg="doc"></div>
+          <img id="geschImg" alt="Geschichte der Keibelhexen" style="display:none">
+        </div>
+        <p class="sage-cap">Auszug aus der Zeitung</p>
+
+        <div class="timeline">
+          <h4>Chronik</h4>
+          <div class="tl-item"><span class="tl-date">1524</span><span class="tl-text"><b>Dorothea Hug</b>Lebt in Huchenfeld als hilfsbereite Kräuterfrau</span></div>
+          <div class="tl-item"><span class="tl-date">Tag X</span><span class="tl-text"><b>Anklage</b>Cuntz' Ochse stirbt – Hugi wird als Hexe denunziert</span></div>
+          <div class="tl-item"><span class="tl-date">+4 Wo</span><span class="tl-text"><b>Hexenkerker</b>Festnahme in Pforzheim, Folter, Freilassung</span></div>
+          <div class="tl-item"><span class="tl-date">Danach</span><span class="tl-text"><b>Marterweibleswald</b>Verbannung – Hugi lebt mit Wildtauben</span></div>
+          <div class="tl-item"><span class="tl-date">2004</span><span class="tl-text"><b>Gründung</b>Jazztänzerinnen kreieren das Häs der Keibelhexen</span></div>
+          <div class="tl-item"><span class="tl-date">Heute</span><span class="tl-text"><b>Keibel Gurruh</b>Jedes Jahr am 11.11. erwacht Hugi neu</span></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ZIRKEL -->
+<section class="section" id="zirkel" data-screen-label="05 Zirkel">
+  <div class="wrap">
+    <div class="s-num">04</div>
+    <div class="s-head">
+      <span class="eyebrow rv">Der Zirkel</span>
+      <h2 class="section-title rv">Wer wir <em>sind</em></h2>
+      <p class="section-lead rv">Sieben Köpfe halten die Fäden in der Hand. Wir glauben an verteilte Verantwortung statt starrer Hierarchien – denn gemeinsam schunkelt es sich einfach besser.</p>
+    </div>
+    <div class="tiles rv" id="zirkelGrid"></div>
+
+    <div class="zirkel-sub rv">Medien-Hexe</div>
+    <div class="tiles" id="medienGrid" style="grid-template-columns:repeat(auto-fit,minmax(220px,280px))"></div>
   </div>
 </section>
 
 <!-- GALERIE -->
-<section id="ga" style="padding:0;background:var(--ink)">
-  <div class="si" style="padding-bottom:1.5rem">
-    <div class="sn rv">06</div>
-    <div class="st rv">Eindrücke</div>
-    <h2 class="sh rv">Galerie</h2>
-    <div class="sl rv"></div>
-  </div>
-  <div style="padding:0 var(--pad) 3rem">
-    <div class="ga-wrap">
-      <button class="ga-arrow ga-prev" onclick="gaScroll(-1)" aria-label="Vorheriges Bild">‹</button>
-      <div class="gastrip" id="gastrip"></div>
-      <button class="ga-arrow ga-next" onclick="gaScroll(1)" aria-label="Nächstes Bild">›</button>
+<section class="section section--sunken" id="ga" data-screen-label="06 Galerie">
+  <div class="wrap" style="padding-bottom:24px">
+    <div class="s-num">05</div>
+    <div class="s-head">
+      <span class="eyebrow rv">Eindrücke</span>
+      <h2 class="section-title rv"><em>Galerie</em></h2>
+      <p class="section-lead rv">Bilder von Umzügen, Auftritten und Begegnungen aus der fünften Jahreszeit.</p>
     </div>
-    <p class="ga-hint">Pfeile, Wischen oder Bild antippen</p>
+  </div>
+  <div class="ga-wrap rv">
+    <button class="ga-arrow ga-prev" onclick="gaScroll(-1)" aria-label="Vorheriges Bild">‹</button>
+    <div class="gastrip" id="gastrip"></div>
+    <button class="ga-arrow ga-next" onclick="gaScroll(1)" aria-label="Nächstes Bild">›</button>
+  </div>
+  <p class="ga-hint">Pfeile, Wischen oder Bild antippen für Großansicht</p>
+</section>
+
+<!-- FLYER -->
+<section class="section" id="fl" data-screen-label="07 Flyer">
+  <div class="wrap">
+    <div class="s-num">06</div>
+    <div class="s-head">
+      <span class="eyebrow rv">Downloads</span>
+      <h2 class="section-title rv">Flyer & <em>Ankündigungen</em></h2>
+      <p class="section-lead rv">Aktuelle Veranstaltungen, Plakate und PDFs zum Mitnehmen.</p>
+    </div>
+    <div class="fgrid rv" id="flgrid"></div>
+    <p id="flempty" class="cal-hint rv" style="display:none">Aktuell keine Flyer im Anflug. Schau bald wieder vorbei.</p>
   </div>
 </section>
 
 <!-- LINKS -->
-<section id="links" style="padding:0;background:var(--ink2)">
-  <div class="si">
-    <div class="sn rv">07</div>
-    <div class="st rv">Empfehlungen</div>
-    <h2 class="sh rv">Links</h2>
-    <div class="sl rv"></div>
-
+<section class="section section--sunken" id="links" data-screen-label="08 Links">
+  <div class="wrap">
+    <div class="s-num">07</div>
+    <div class="s-head">
+      <span class="eyebrow rv">Empfehlungen</span>
+      <h2 class="section-title rv"><em>Links</em></h2>
+      <p class="section-lead rv">Handwerk und gute Nachbarschaft – diese Adressen empfehlen wir gerne weiter.</p>
+    </div>
     <div class="lk-cat rv">
       <h3 class="lk-cat-title">Maskenschnitzer</h3>
-      <ul class="lk-list">
-        <li><a href="https://www.facebook.com/jogiweiss/?locale=de_DE" target="_blank" rel="noopener">Jogi Weiss <span class="arr">↗</span></a></li>
-      </ul>
+      <ul class="lk-list"><li><a href="https://www.facebook.com/jogiweiss/?locale=de_DE" target="_blank" rel="noopener">Jogi Weiss <span class="arr">↗</span></a></li></ul>
     </div>
-
     <div class="lk-cat rv">
       <h3 class="lk-cat-title">Handschuhe</h3>
-      <ul class="lk-list">
-        <li><a href="https://www.fasnet-strickerei.de/start" target="_blank" rel="noopener">Fasnet-Strickerei <span class="arr">↗</span></a></li>
-      </ul>
+      <ul class="lk-list"><li><a href="https://www.fasnet-strickerei.de/start" target="_blank" rel="noopener">Fasnet-Strickerei <span class="arr">↗</span></a></li></ul>
     </div>
-
   </div>
 </section>
 
 <!-- KONTAKT -->
-<section id="ko" style="padding:0;background:var(--ink)">
-  <div class="si">
-    <div class="sn rv">08</div>
-    <div class="st rv">Schreib uns</div>
-    <h2 class="sh rv">Kontakt</h2>
-    <div class="sl rv"></div>
+<section class="section" id="ko" data-screen-label="09 Kontakt">
+  <div class="wrap">
+    <div class="s-num">08</div>
+    <div class="s-head">
+      <span class="eyebrow rv">Schreib uns</span>
+      <h2 class="section-title rv"><em>Kontakt</em></h2>
+    </div>
     <div class="kog">
       <div>
-        <h3 class="rv" style="font-size:1.05rem;font-weight:700;margin-bottom:1.5rem">So erreichst du uns</h3>
-        <div class="koi rv"><div class="koic">✉️</div><a href="mailto:keibelhexen@gmx.de">keibelhexen@gmx.de</a></div>
-        <div class="koi rv"><div class="koic">📸</div><a href="https://www.instagram.com/keibelhexen_huchenfeld" id="instaLink" target="_blank">@keibelhexen_huchenfeld</a></div>
-        <div class="koi rv"><div class="koic">📍</div><span>Huchenfeld, Pforzheim</span></div>
-        <p class="rv" style="margin-top:1.5rem;color:var(--g);font-size:.9rem;line-height:1.8">Fragen, Mitmachen oder einfach Hallo sagen? Wir freuen uns!</p>
+        <h3 class="ko-title rv">So erreichst du uns</h3>
+        <div class="koi rv"><div class="koic" data-svg="mail"></div><a href="mailto:keibelhexen@gmx.de">keibelhexen@gmx.de</a></div>
+        <div class="koi rv"><div class="koic" data-svg="insta"></div><a href="https://www.instagram.com/keibelhexen_huchenfeld" id="instaLink" target="_blank">@keibelhexen_huchenfeld</a></div>
+        <div class="koi rv"><div class="koic" data-svg="pin"></div><span>Huchenfeld, Pforzheim</span></div>
+        <p class="ko-aside rv">Fragen, Mitmachen oder einfach Hallo sagen? Wir freuen uns auf deine Nachricht!</p>
       </div>
       <div class="kof rv">
-        <div class="fg"><label>Name</label><input id="fN" type="text" placeholder="Dein Name"></div>
-        <div class="fg"><label>E-Mail</label><input id="fE" type="email" placeholder="deine@email.de"></div>
-        <div class="fg"><label>Betreff</label><input id="fS" type="text" placeholder="Worum geht's?"></div>
-        <div class="fg"><label>Nachricht</label><textarea id="fM" placeholder="Deine Nachricht…"></textarea></div>
-        <button class="btn bp" style="width:100%" onclick="sendMail()">Nachricht senden →</button>
+        <div class="fg"><label for="fN">Name</label><input id="fN" type="text" placeholder="Dein Name"></div>
+        <div class="fg"><label for="fE">E-Mail</label><input id="fE" type="email" placeholder="deine@email.de"></div>
+        <div class="fg"><label for="fS">Betreff</label><input id="fS" type="text" placeholder="Worum geht's?"></div>
+        <div class="fg"><label for="fM">Nachricht</label><textarea id="fM" placeholder="Deine Nachricht…"></textarea></div>
+        <button class="btn primary" style="width:100%;justify-content:center" onclick="sendMail()">Nachricht senden →</button>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer>
-  <div class="foi">
-    <div class="fobig">Keibelhexen</div>
-    <div class="foline"></div>
-    <div class="forow">
-      <div class="soc">
-        <a href="https://www.instagram.com/keibelhexen_huchenfeld" id="instaFoot" target="_blank">📸</a>
-        <a href="mailto:keibelhexen@gmx.de">✉️</a>
+<footer class="site">
+  <div class="wrap">
+    <div class="fo-big">Keibel Gurruh!</div>
+    <div class="fo-grid">
+      <div>
+        <h5>Keibelhexen Huchenfeld</h5>
+        <p>Schwäbisch-Alemannische Fasnet. Seit 2008 wachsende Faschingsgemeinde aus Huchenfeld, Pforzheim.</p>
+        <p class="schlachtruf">„Die schenschde Hexe' uff derre Welt…"</p>
       </div>
-      <p class="focopy">© 2026 Keibelhexen Huchenfeld · Huchenfeld, Pforzheim</p>
+      <div>
+        <h5>Verein</h5>
+        <ul>
+          <li><a href="#uu">Über uns</a></li>
+          <li><a href="#sage">Sage</a></li>
+          <li><a href="#zirkel">Zirkel</a></li>
+          <li><a href="#tr">Termine</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Mehr</h5>
+        <ul>
+          <li><a href="#ga">Galerie</a></li>
+          <li><a href="#fl">Flyer</a></li>
+          <li><a href="#links">Links</a></li>
+          <li><a href="#ko">Kontakt</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Kontakt</h5>
+        <ul>
+          <li><a href="mailto:keibelhexen@gmx.de">keibelhexen@gmx.de</a></li>
+          <li><a href="https://www.instagram.com/keibelhexen_huchenfeld" target="_blank" id="instaSide">@keibelhexen_huchenfeld</a></li>
+          <li>Huchenfeld, Pforzheim</li>
+        </ul>
+        <div class="soc" style="margin-top:14px">
+          <a href="https://www.instagram.com/keibelhexen_huchenfeld" id="instaFoot" target="_blank" aria-label="Instagram" data-svg="insta"></a>
+          <a href="mailto:keibelhexen@gmx.de" aria-label="E-Mail" data-svg="mail"></a>
+        </div>
+      </div>
+    </div>
+    <div class="fo-legal">
+      <span>© 2026 Keibelhexen Huchenfeld</span>
+      <span>Pforzheim · Baden-Württemberg</span>
+    </div>
+    <div class="fo-credit">
+      Homepage kreiert, entwickelt und gestaltet von <strong>Manuel Rudorfer</strong>
     </div>
   </div>
 </footer>
 
 <!-- LIGHTBOX -->
 <div class="lb" id="lb">
-  <button class="lbx" onclick="closeLb()">✕</button>
+  <button class="lbx" onclick="closeLb()" aria-label="Schließen">✕</button>
   <span class="lbcnt" id="lbcnt"></span>
   <div class="lbtrack">
-    <button class="lbnav lbprev" onclick="lbMove(-1)">‹</button>
+    <button class="lbnav lbprev" onclick="lbMove(-1)" aria-label="Zurück">‹</button>
     <div class="lbslides" id="lbslides"></div>
-    <button class="lbnav lbnext" onclick="lbMove(1)">›</button>
+    <button class="lbnav lbnext" onclick="lbMove(1)" aria-label="Weiter">›</button>
   </div>
   <div class="lbdots" id="lbdots"></div>
 </div>
 
-<script>
-// ══════════════════════════════════════
-// EINSTELLUNGEN – bei Bedarf anpassen
-const GH_USER   = 'Keibelhexen';
-const GH_REPO   = 'Keibelhexen-keibelhexen';
-const GH_BRANCH = 'main';
-const INSTA     = 'keibelhexen_huchenfeld';
+<!-- TWEAKS PANEL -->
+<div id="tweaks"></div>
 
-// ZIRKEL – Reihenfolge und Beschriftung der Karten
-// Bilder in images/zirkel/ ablegen, Dateiname beginnt mit dem Vornamen
-const ZIRKEL = [
-  {name:'Manuel', role:'Ober-Hexe'},
-  {name:'Nicola', role:'Kassen-Hexe'},
-  {name:'Uwe',    role:'Vernunft-Hexe'},
-  {name:'Robin',  role:'Getränke-DJ-Hexe'},
-  {name:'Petra',  role:'Kreativ-Hexe'},
-  {name:'Frank',  role:'Ichbinauchdabei-Hexe'},
-  {name:'Marcel', role:'Hands-on-Hexe'}
-];
-
-// MEDIENTEAM – Bilder in images/zirkel/ ablegen, Dateiname beginnt mit dem Namen
-const MEDIENTEAM = [
-  {name:'Vero', role:'Medienteam'}
-];
-// ══════════════════════════════════════
-
-const RAW = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}`;
-const API = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents`;
-
-let dd = {gallery:[],flyers:[],zirkel:[],medienteam:[]};
-let lbItems=[],lbIdx=0,lbTx=0;
-
-// ─── INIT ───
-window.addEventListener('DOMContentLoaded',()=>{
-  initCursor();
-  initConfetti();
-  initScroll();
-  initReveal();
-  setInsta();
-  renderZirkel();        // sofort Platzhalter rendern
-  loadFromGitHub();
-});
-
-// ─── INSTAGRAM ───
-function setInsta(){
-  const a=document.getElementById('instaLink');
-  if(a){a.href=`https://www.instagram.com/${INSTA}`;a.textContent=`@${INSTA}`;}
-  const b=document.getElementById('instaFoot');
-  if(b) b.href=`https://www.instagram.com/${INSTA}`;
-}
-
-// ─── GITHUB LADEN ───
-const isImg = n=>/\.(jpg|jpeg|png|gif|webp|svg)$/i.test(n);
-const isPdf = n=>/\.pdf$/i.test(n);
-const isVid = n=>/\.(mp4|webm|mov|m4v|ogv)$/i.test(n);
-
-async function ghList(path){
-  try{
-    const r=await fetch(`${API}/${path}`);
-    if(!r.ok)return[];
-    const d=await r.json();
-    return Array.isArray(d)?d:[];
-  }catch(e){return[];}
-}
-
-// Match: <vorname>.<ext>, <vorname>-…, <vorname>_…, <vorname> …
-function findPersonImage(files, firstName){
-  const n=firstName.toLowerCase();
-  return files.find(f=>{
-    const base=f.name.toLowerCase().replace(/\.[^.]+$/,'');
-    return base===n || base.startsWith(n+'-') || base.startsWith(n+'_') || base.startsWith(n+' ');
-  });
-}
-
-function videoMime(name){
-  const ext=name.split('.').pop().toLowerCase();
-  if(ext==='webm')return'video/webm';
-  if(ext==='ogv')return'video/ogg';
-  return'video/mp4';
-}
-
-async function loadFromGitHub(){
-  showLoader(true);
-  try{
-    // Logo
-    const logoFiles=await ghList('images/logo');
-    const logoFile=logoFiles.find(f=>isImg(f.name));
-    if(logoFile) setLogo(`${RAW}/images/logo/${logoFile.name}`);
-
-    // Intro-Video
-    const introFiles=await ghList('images/intro');
-    const videoFile=introFiles.find(f=>isVid(f.name));
-    if(videoFile){
-      const wrap=document.getElementById('introVideoWrap');
-      wrap.dataset.state='loaded';
-      wrap.innerHTML=`<video controls playsinline preload="metadata">
-        <source src="${RAW}/images/intro/${videoFile.name}" type="${videoMime(videoFile.name)}">
-        Dein Browser unterstützt kein HTML5 Video.
-      </video>`;
-    }
-
-    // Über uns
-    const aboutFiles=await ghList('images/ueber-uns');
-    const aboutFile=aboutFiles.find(f=>isImg(f.name));
-    if(aboutFile) setAboutImg(`${RAW}/images/ueber-uns/${aboutFile.name}`);
-
-    // Maske
-    const maskeFiles=await ghList('images/maske');
-    const maskeFile=maskeFiles.find(f=>isImg(f.name));
-    if(maskeFile){
-      const img=document.getElementById('maskeImgEl');
-      img.src=`${RAW}/images/maske/${maskeFile.name}`;
-      img.style.display='block';
-      document.getElementById('maskeImgPh').style.display='none';
-    }
-
-    // Geschichte Zeitungsbild
-    const geschFiles=await ghList('images/geschichte');
-    const geschFile=geschFiles.find(f=>isImg(f.name));
-    if(geschFile){
-      const img=document.getElementById('geschImgEl');
-      img.src=`${RAW}/images/geschichte/${geschFile.name}`;
-      img.style.display='block';
-      document.getElementById('geschImgPh').style.display='none';
-    }
-
-    // Zirkel + Medienteam (alle in images/zirkel/)
-    const zirkelFiles=(await ghList('images/zirkel')).filter(f=>isImg(f.name));
-    dd.zirkel=ZIRKEL.map(p=>{
-      const file=findPersonImage(zirkelFiles, p.name);
-      return file?`${RAW}/images/zirkel/${file.name}`:null;
-    });
-    dd.medienteam=MEDIENTEAM.map(p=>{
-      const file=findPersonImage(zirkelFiles, p.name);
-      return file?`${RAW}/images/zirkel/${file.name}`:null;
-    });
-
-    // Galerie
-    const gaFiles=await ghList('images/galerie');
-    dd.gallery=gaFiles.filter(f=>isImg(f.name)).map(f=>`${RAW}/images/galerie/${f.name}`);
-
-    // Flyer
-    const flFiles=await ghList('images/flyer');
-    dd.flyers=flFiles.filter(f=>isImg(f.name)||isPdf(f.name)).map(f=>({
-      name: f.name.replace(/\.[^.]+$/,''),
-      url:  isPdf(f.name)
-              ?`https://docs.google.com/viewer?url=${encodeURIComponent(`${RAW}/images/flyer/${f.name}`)}&embedded=true`
-              :`${RAW}/images/flyer/${f.name}`,
-      downloadUrl:`${RAW}/images/flyer/${f.name}`,
-      type: isPdf(f.name)?'pdf':'img'
-    }));
-
-    renderAll();
-  }catch(e){
-    console.warn('GitHub Fehler:',e.message);
-    renderAll();
-  }
-  showLoader(false);
-}
-
-function showLoader(v){document.getElementById('loader').style.display=v?'flex':'none';}
-function renderAll(){renderZirkel();renderGallery();renderFlyers();}
-
-// ─── LOGO + ABOUT ───
-function setLogo(src){
-  document.getElementById('navlogo').innerHTML=`<img src="${src}" style="height:36px;filter:drop-shadow(0 0 8px rgba(96,165,250,.5))">`;
-  document.getElementById('hlph').style.display='none';
-  const hw=document.getElementById('hlogo');
-  const old=hw.querySelector('img');if(old)old.remove();
-  const img=document.createElement('img');img.src=src;
-  img.style.cssText='width:clamp(120px,25vw,180px);height:clamp(120px,25vw,180px);object-fit:contain;filter:drop-shadow(0 0 40px rgba(37,99,235,.5));animation:fl 6s ease-in-out infinite';
-  hw.prepend(img);
-}
-function setAboutImg(src){
-  const img=document.getElementById('auimg');img.src=src;img.style.display='block';
-  document.getElementById('auiph').style.display='none';
-}
-
-// ─── ZIRKEL + MEDIENTEAM ───
-function renderPersonCard(p, src){
-  return `<div class="zk-card">
-    <div class="zk-img">
-      ${src
-        ?`<img src="${src}" alt="${p.name} – ${p.role}" loading="lazy">`
-        :`<div class="zk-imgph"><span>👤</span><span>Bild: images/zirkel/${p.name.toLowerCase()}.jpg</span></div>`}
-    </div>
-    <div class="zk-info">
-      <div class="zk-name">${p.name}</div>
-      <div class="zk-role">${p.role}</div>
-    </div>
-  </div>`;
-}
-function renderZirkel(){
-  const grid=document.getElementById('zirkelGrid');
-  if(grid) grid.innerHTML=ZIRKEL.map((p,i)=>renderPersonCard(p, dd.zirkel?.[i])).join('');
-  const mgrid=document.getElementById('medienGrid');
-  if(mgrid) mgrid.innerHTML=MEDIENTEAM.map((p,i)=>renderPersonCard(p, dd.medienteam?.[i])).join('');
-}
-
-// ─── GALERIE ───
-function renderGallery(){
-  const s=document.getElementById('gastrip');
-  if(!dd.gallery.length){
-    s.innerHTML='<div class="gi"><div class="giph">📷<span>Bilder → images/galerie/</span></div></div>';return;
-  }
-  s.innerHTML=dd.gallery.map((src,i)=>`
-    <div class="gi" onclick="openLbSet(${i},'gallery')">
-      <img src="${src}" alt="Galerie ${i+1}" loading="lazy">
-    </div>`).join('');
-}
-function gaScroll(dir){
-  const s=document.getElementById('gastrip');
-  if(!s)return;
-  s.scrollBy({left:dir*(s.clientWidth*0.75),behavior:'smooth'});
-}
-
-// ─── FLYER ───
-function renderFlyers(){
-  const g=document.getElementById('flgrid'),e=document.getElementById('flempty');
-  if(!dd.flyers.length){g.innerHTML='';e.style.display='block';return;}
-  e.style.display='none';
-  g.innerHTML=dd.flyers.map((f,i)=>`
-    <div class="fc" onclick="openFlyer(${i})">
-      <div class="fp">
-        ${f.type==='pdf'
-          ?`<div style="display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--b3)"><span style="font-size:2.8rem">📄</span><span style="font-size:.72rem;font-weight:700;text-transform:uppercase">PDF</span></div>`
-          :`<img src="${f.url}" alt="${f.name}" loading="lazy">`}
-        <div class="fov"><span>${f.type==='pdf'?'📄 Öffnen':'🔍 Anzeigen'}</span><span style="font-size:.7rem;opacity:.7">⬇ Download</span></div>
-      </div>
-      <div class="finfo"><h3>${f.name}</h3><span class="ftype">${f.type==='pdf'?'PDF':'Bild'} ↗</span></div>
-    </div>`).join('');
-}
-function openFlyer(i){openLbSet(i,'flyer');}
-
-// ─── LIGHTBOX ───
-function openLbSet(startIdx,type){
-  if(type==='gallery') lbItems=dd.gallery.map(src=>({url:src,type:'img',downloadUrl:src}));
-  else if(type==='flyer') lbItems=dd.flyers.map(f=>({url:f.url,type:f.type,name:f.name,downloadUrl:f.downloadUrl}));
-  lbIdx=Math.max(0,Math.min(startIdx,lbItems.length-1));
-  buildLb();
-  document.getElementById('lb').classList.add('on');
-  document.body.style.overflow='hidden';
-}
-function buildLb(){
-  const slides=document.getElementById('lbslides'),dots=document.getElementById('lbdots');
-  slides.style.transform='translateX(0)';
-  slides.innerHTML=lbItems.map((it,i)=>`
-    <div class="lbslide">
-      ${it.type==='pdf'?`<iframe src="${it.url}"></iframe>`:`<img src="${it.url}" alt="Bild ${i+1}">`}
-      <a class="lbdl" href="${it.downloadUrl}" download="${it.name||'download'}" target="_blank">⬇ Herunterladen</a>
-    </div>`).join('');
-  dots.innerHTML=lbItems.length>1?lbItems.map((_,i)=>`<div class="lbdot${i===lbIdx?' on':''}" onclick="lbGo(${i})"></div>`).join(''):'';
-  document.getElementById('lbcnt').textContent=lbItems.length>1?`${lbIdx+1} / ${lbItems.length}`:'';
-  requestAnimationFrame(()=>lbGo(lbIdx,false));
-  const lb=document.getElementById('lb');
-  lb.ontouchstart=e=>{lbTx=e.touches[0].clientX;};
-  lb.ontouchend=e=>{const dx=e.changedTouches[0].clientX-lbTx;if(Math.abs(dx)>45)lbMove(dx<0?1:-1);};
-}
-function lbGo(i,anim=true){
-  lbIdx=Math.max(0,Math.min(i,lbItems.length-1));
-  const s=document.getElementById('lbslides');
-  s.style.transition=anim?'transform .35s cubic-bezier(.4,0,.2,1)':'none';
-  s.style.transform=`translateX(-${lbIdx*100}vw)`;
-  document.querySelectorAll('.lbdot').forEach((d,di)=>d.classList.toggle('on',di===lbIdx));
-  document.getElementById('lbcnt').textContent=lbItems.length>1?`${lbIdx+1} / ${lbItems.length}`:'';
-}
-function lbMove(d){lbGo(lbIdx+d);}
-function closeLb(){
-  document.getElementById('lb').classList.remove('on');
-  document.body.style.overflow='';
-  lbItems=[];lbIdx=0;
-  document.getElementById('lbslides').innerHTML='';
-  document.getElementById('lbdots').innerHTML='';
-}
-document.addEventListener('keydown',e=>{
-  if(!document.getElementById('lb').classList.contains('on'))return;
-  if(e.key==='ArrowLeft')lbMove(-1);
-  if(e.key==='ArrowRight')lbMove(1);
-  if(e.key==='Escape')closeLb();
-});
-
-// ─── HEXENBESEN CURSOR + LUFTWIRBEL ───
-function initCursor(){
-  if(!matchMedia('(hover:hover)').matches || window.innerWidth<=768) return;
-  const cur=document.getElementById('broom-cursor');
-  if(!cur)return;
-
-  // Trail-Partikel-Pool
-  const POOL_SIZE=25;
-  const pool=[];
-  for(let i=0;i<POOL_SIZE;i++){
-    const el=document.createElement('span');
-    el.className='whip-trail';
-    document.body.appendChild(el);
-    pool.push(el);
-  }
-  let poolIdx=0,lastEmit=0;
-
-  // Spawn-Bereich: hinten an den Borsten (etwa 50-60px diagonal vom Klickpunkt)
-  function emitTrail(x,y){
-    const now=performance.now();
-    if(now-lastEmit<28)return;
-    lastEmit=now;
-    const el=pool[poolIdx];
-    poolIdx=(poolIdx+1)%POOL_SIZE;
-    if(el._anim)el._anim.cancel();
-
-    // Spawnpunkt im Borstenbereich mit Streuung
-    const sx = x + 50 + (Math.random()-.5) * 28;
-    const sy = y + 50 + (Math.random()-.5) * 28;
-    el.style.left = sx + 'px';
-    el.style.top  = sy + 'px';
-
-    // Drift weg vom Cursor (nach hinten-unten-rechts) mit etwas Zufall
-    const baseAngle = Math.PI * 0.25; // Richtung diagonal nach unten-rechts
-    const spread    = Math.PI * 0.9;
-    const angle     = baseAngle + (Math.random()-.5) * spread;
-    const dist      = 22 + Math.random() * 26;
-    const dx        = Math.cos(angle) * dist;
-    const dy        = Math.sin(angle) * dist - 10; // leichter Aufwärts-Auftrieb
-    const rot       = (Math.random()-.5) * 360;
-    const size      = .6 + Math.random() * .5;
-
-    el._anim=el.animate([
-      {opacity:.7,transform:`scale(${size*.35}) rotate(0deg)`},
-      {opacity:0,transform:`translate(${dx}px,${dy}px) scale(${size*1.7}) rotate(${rot}deg)`}
-    ],{duration:650+Math.random()*350,easing:'cubic-bezier(.4,0,.2,1)',fill:'forwards'});
-  }
-
-  let mx=0,my=0,raf=null;
-  document.addEventListener('mousemove',e=>{
-    mx=e.clientX;my=e.clientY;
-    emitTrail(mx,my);
-    if(raf)return;
-    raf=requestAnimationFrame(()=>{
-      cur.style.transform=`translate(${mx-4}px, ${my-4}px)`;
-      raf=null;
-    });
-  },{passive:true});
-  document.addEventListener('mouseleave',()=>cur.style.opacity='0');
-  document.addEventListener('mouseenter',()=>cur.style.opacity='1');
-}
-
-// ─── KONFETTI ───
-function initConfetti(){
-  const canvas=document.getElementById('confetti');if(!canvas)return;
-  const ctx=canvas.getContext('2d');
-  const resize=()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;};
-  resize();window.addEventListener('resize',resize);
-  const cols=['#2563eb','#60a5fa','#bfdbfe','#f0f6ff','#93c5fd','#1a4a8a'];
-  const W=130;
-  const ps=Array.from({length:60},(_,i)=>{
-    const side=i<30?'L':'R';
-    return{side,x:Math.random()*W,y:Math.random()*-800,w:5+Math.random()*7,h:3+Math.random()*5,
-      col:cols[~~(Math.random()*cols.length)],spd:.7+Math.random()*1.3,
-      ang:Math.random()*Math.PI*2,spin:(Math.random()-.5)*.06,
-      drift:(Math.random()-.5)*.3,alpha:.6+Math.random()*.4};
-  });
-  (function loop(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ps.forEach(p=>{
-      const px=p.side==='L'?p.x:canvas.width-W+p.x;
-      ctx.save();ctx.globalAlpha=p.alpha;ctx.translate(px,p.y);ctx.rotate(p.ang);
-      ctx.fillStyle=p.col;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();
-      p.y+=p.spd;p.x+=p.drift;p.ang+=p.spin;
-      if(p.y>canvas.height+20){p.y=-20-Math.random()*300;p.x=Math.random()*W;}
-      if(p.x<-10)p.x=W;if(p.x>W+10)p.x=0;
-    });
-    requestAnimationFrame(loop);
-  })();
-}
-
-// ─── SCROLL + REVEAL ───
-function initScroll(){
-  window.addEventListener('scroll',()=>{
-    document.getElementById('prog').style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%';
-    document.getElementById('nav').classList.toggle('sc',scrollY>50);
-  });
-}
-function initReveal(){
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');}),{threshold:.06});
-  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-  setTimeout(()=>document.querySelectorAll('.rv').forEach(el=>el.classList.add('on')),900);
-}
-
-// ─── KONTAKT ───
-function sendMail(){
-  const n=document.getElementById('fN').value.trim(),e=document.getElementById('fE').value.trim(),
-        s=document.getElementById('fS').value.trim(),m=document.getElementById('fM').value.trim();
-  if(!n||!e||!m){toast('Bitte Name, E-Mail & Nachricht ausfüllen');return;}
-  window.open(`mailto:keibelhexen@gmx.de?subject=${encodeURIComponent((s||'Kontakt')+' – '+n)}&body=${encodeURIComponent('Name: '+n+'\nE-Mail: '+e+'\n\n'+m)}`);
-}
-
-// ─── MENU ───
-function tmenu(){
-  document.getElementById('navlinks').classList.toggle('open');
-  document.getElementById('hbg').classList.toggle('open');
-}
-document.querySelectorAll('.nm a').forEach(a=>a.addEventListener('click',()=>{
-  document.getElementById('navlinks').classList.remove('open');
-  document.getElementById('hbg').classList.remove('open');
-}));
-
-// ─── UTILS ───
-function toast(msg){
-  const t=document.createElement('div');t.className='toast';t.textContent=msg;
-  document.body.appendChild(t);setTimeout(()=>t.remove(),2800);
-}
-</script>
+<script src="app.js"></script>
 </body>
 </html>

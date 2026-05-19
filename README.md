@@ -8,31 +8,30 @@ Build-Tools, kein Server, kein npm.
 - `index.html` – die Seite
 - `styles.css` – Layout & Komponenten
 - `ds-tokens.css` – Farben, Schriften, Spacing
-- `app.js` – Galerie, Lightbox, Termine-Automatik, Konfetti, Cursor
+- `app.js` – Galerie, Lightbox, Termine-Automatik, Konfetti, Cursor, GitHub-Loader
 - `favicon-*.png` + `apple-touch-icon.png` – Browser- und iOS-Icons
-- `images/` – **alle Bilder schon optimiert** (siehe unten)
 
-## Bilder
+## Wie die Bilder funktionieren
 
-Sämtliche Bilder wurden für das Web optimiert:
+Die Webseite lädt **alle Bilder dynamisch** aus dem `images/`-Ordner dieses
+Repos über `raw.githubusercontent.com`. Du musst keinen Code anfassen,
+um neue Bilder hinzuzufügen:
 
-| Original | Optimiert |
-|---|---|
-| Keibelhexen_0456.jpg (10.9 MB) | 373 KB |
-| Larve.png (2.3 MB) | 175 KB |
-| Plakat (3.2 MB PNG) | 398 KB JPG |
-| Zirkel-Portraits (200-500 KB) | 47–145 KB |
-| Galerie-Bilder (270 KB-1.3 MB) | 227–804 KB |
+```
+images/
+├── logo/        →  Logo (wird im Header + Hero gezeigt)
+├── ueber-uns/   →  „Das Häs"-Foto im About-Bereich
+├── maske/       →  Larven-Foto im About-Bereich
+├── geschichte/  →  Bild neben der Sage (z. B. Zeitungsausschnitt)
+├── zirkel/      →  Portraits — Dateiname = Vorname (manuel.jpg, Vero.jpg…)
+├── galerie/     →  ALLE Bilder werden in der Galerie angezeigt
+└── flyer/       →  ALLE PDFs/Bilder werden im Flyer-Bereich angezeigt
+```
 
-**Gesamt: 22 MB → 4 MB** (84 % kleiner)
-
-Die Seite zeigt die Bilder jetzt aus dem mitgelieferten `images/`-Ordner –
-das ist deutlich schneller als sie über `raw.githubusercontent.com` zu
-laden und vermeidet GitHub-API-Rate-Limits.
-
-> **Hinweis:** Wenn du neue Bilder in dieses Repo lädst, erscheinen sie
-> *nicht* automatisch wie früher – stattdessen müssen sie hier in den
-> `images/`-Ordnern liegen. So funktioniert das jetzt richtig schnell.
+**Wichtig:** Bilder bitte vor dem Hochladen verkleinern!
+Empfehlung: max. 1600 px Breite, JPEG-Qualität ~80 %. Das reicht für
+schöne Darstellung und hält die Seite schnell. Tool-Tipp: [squoosh.app](https://squoosh.app)
+oder kostenlose Online-Komprimierer.
 
 ## Automatische Termine
 
@@ -40,7 +39,7 @@ Die drei Saison-Daten berechnen sich **jedes Jahr automatisch neu** beim
 Seitenaufruf:
 
 - **11. November** – fix
-- **Aschermittwoch** – 46 Tage vor Ostersonntag (Gauss-Algorithmus)
+- **Aschermittwoch** – 46 Tage vor Ostersonntag
 - **Schmotziger Donnerstag** – Donnerstag vor Aschermittwoch
 
 Sobald der Aschermittwoch des laufenden Jahres vorbei ist, springt die
@@ -48,29 +47,11 @@ Seite automatisch auf die nächste Kampagne.
 
 ## Hosting via GitHub Pages
 
-1. **Diese Dateien in das Repo pushen** – am einfachsten:
-   - GitHub-Repo öffnen
-   - „Add file → Upload files"
-   - Den ganzen Inhalt dieses Ordners reinziehen
-   - Commit
-2. Im Repo unter **Settings → Pages**:
+1. Im Repo unter **Settings → Pages**:
    - Source: `Deploy from a branch`
-   - Branch: `main` (Root oder `/docs`)
-3. Nach ein paar Minuten ist die Seite live unter
+   - Branch: `main` (Root)
+2. Nach ein paar Minuten ist die Seite live unter
    `https://keibelhexen.github.io/Keibelhexen-keibelhexen/`
-
-Für eine eigene Domain: CNAME-Datei im Repo-Root anlegen mit der Domain.
-
-## Lokal testen
-
-Einfach `index.html` doppelklicken – läuft. Für saubere Pfade alternativ
-ein Mini-Server:
-
-```
-python3 -m http.server 8000
-```
-
-Dann `http://localhost:8000` öffnen.
 
 ---
 

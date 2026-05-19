@@ -23,39 +23,27 @@ const MEDIENTEAM = [
 const RAW = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}`;
 const API = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents`;
 
-// Static manifest — paints the page immediately from optimized local images
-// stored in /images/. The live GitHub loader still runs as a fallback to pick
-// up newly-added files (e.g. fresh flyer PDFs uploaded to the repo).
+// Static manifest — drawn first so the page paints with sensible defaults
+// while the live GitHub loader catches up with any newly-added files.
+// Paths point to raw.githubusercontent.com (LOCAL_FIRST=false).
 const MANIFEST = {
   logo:     'images/logo/Logo.png',
-  // Hero uses the logo as a faint silhouette ("schemenhaft erkennbar")
   hero:     'images/logo/Logo.png',
-  // Top frame in About section: Häs portrait — actual member photo (optimized)
   haes:     'images/ueber-uns/Keibelhexen_0456.jpg',
-  // Bottom frame in About section: Larve / Maskenbild (optimized to JPEG)
-  larve:    'images/maske/Larve.jpg',
-  gesch:    'images/geschichte/Hexenverbrennungen.jpg',
+  larve:    'images/maske/Larve.png',
+  gesch:    'images/geschichte/Hexenverbrennungen.JPG',
   zirkel: {
-    Manuel: 'images/zirkel/manuel.jpg',
-    Nicola: 'images/zirkel/nicola.jpg',
-    Uwe:    'images/zirkel/Uwe.jpg',
-    Robin:  'images/zirkel/robin.jpg',
-    Petra:  'images/zirkel/petra.jpg',
-    Frank:  'images/zirkel/Frank.jpg',
-    Marcel: 'images/zirkel/marcel.jpg',
-    Vero:   'images/zirkel/Vero.jpg'
+    Manuel: 'images/zirkel/manuel.jpeg',
+    Nicola: 'images/zirkel/nicola.jpeg',
+    Uwe:    'images/zirkel/Uwe.jpeg',
+    Robin:  'images/zirkel/robin.jpeg',
+    Petra:  'images/zirkel/petra.jpeg',
+    Frank:  'images/zirkel/Frank.jpeg',
+    Marcel: 'images/zirkel/marcel.jpeg',
+    Vero:   'images/zirkel/Vero.jpeg'
   },
-  gallery: [
-    'images/galerie/foto1.jpg',
-    'images/galerie/foto2.jpg',
-    'images/galerie/foto3.jpg',
-    'images/galerie/foto6.jpg',
-    'images/galerie/foto8.jpg',
-    'images/galerie/foto9.jpg'
-  ],
-  flyers: [
-    {name:'Rathaussturm 2025', file:'images/flyer/2025-Plakat-Rathaussturm.jpg'}
-  ]
+  gallery: [],     // filled dynamically by loadFromGitHub()
+  flyers:  []      // filled dynamically by loadFromGitHub()
 };
 
 const dd = {gallery:[],flyers:[],zirkel:[],medienteam:[]};
@@ -245,7 +233,7 @@ function videoMime(name){
 // When LOCAL_FIRST is true we serve from the page's own /images/ folder
 // (optimized images shipped with the site). Otherwise we fall back to
 // raw.githubusercontent.com — handy for live previews without uploading.
-const LOCAL_FIRST = true;
+const LOCAL_FIRST = false;
 function rawUrl(path){
   if(LOCAL_FIRST) return path.split('/').map(encodeURIComponent).join('/');
   return `${RAW}/${path.split('/').map(encodeURIComponent).join('/')}`;
@@ -294,11 +282,9 @@ function applyManifest(){
 }
 
 async function loadFromGitHub(){
-  // When using local images (LOCAL_FIRST=true) the GitHub live loader is
-  // disabled — manifest paths point to images shipped with the site, which is
-  // faster and avoids API rate-limit issues. To re-enable, flip LOCAL_FIRST
-  // to false at the top of this file.
-  if(LOCAL_FIRST) return;
+  // Live dynamic loader: queries the GitHub Contents API for each images/
+  // folder so newly-uploaded files appear automatically without code edits.
+  // Disable by flipping LOCAL_FIRST to true at the top of this file.
   document.getElementById('loader').classList.add('on');
   try{
     const [logoFiles, introFiles, haesFiles, maskeFiles, geschFiles, zirkelFiles, gaFiles, flFiles] =

@@ -148,6 +148,7 @@ nav.main a:hover{color:var(--brand-bone);background:rgba(255,255,255,.06)}
   100% {transform:translate3d(var(--dx),105vh,0) rotate(calc(var(--rot) + 720deg));opacity:0}
 }
 @media(prefers-reduced-motion: reduce){.confetti{display:none}}
+@media(max-width: 700px){.confetti{display:none}}
 /* Keep content above the confetti layer */
 .utility,header.site,section,footer.site,#tweaks,#lb,#loader,#prog,#broom-cursor{position:relative;z-index:2}
 .utility{z-index:51}
@@ -247,7 +248,7 @@ header.site{z-index:50}
 /* ---------- GALERIE ---------- */
 #ga{overflow:hidden}
 .ga-wrap{position:relative;padding:0 24px}
-.gastrip{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;padding-bottom:14px;scroll-behavior:smooth}
+.gastrip{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab;padding-bottom:14px;scroll-behavior:smooth;touch-action:pan-x;overscroll-behavior-x:contain;overscroll-behavior-y:auto}
 .gastrip::-webkit-scrollbar{display:none}
 .gastrip:active{cursor:grabbing}
 .gi{flex:0 0 clamp(280px,32vw,420px);height:clamp(340px,42vw,520px);scroll-snap-align:start;background:var(--bg-elevated);border:1px solid var(--line);overflow:hidden;position:relative;border-radius:var(--r-3);transition:transform var(--dur-base) var(--ease-out),box-shadow var(--dur-base) var(--ease-out);box-shadow:var(--shadow-1)}

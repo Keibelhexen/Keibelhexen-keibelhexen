@@ -290,7 +290,7 @@ async function loadFromGitHub(){
   try{
     const [logoFiles, introFiles, haesFiles, maskeFiles, geschFiles, zirkelFiles, gaFiles, flFiles] =
       await Promise.all([
-        ghList('images/logo'), ghList('images/intro'), ghList('images/ueber-uns'),
+        ghList('images/logo'), ghList('images/Videointro'), ghList('images/ueber-uns'),
         ghList('images/maske'), ghList('images/geschichte'), ghList('images/zirkel'),
         ghList('images/galerie'), ghList('images/flyer')
       ]);
@@ -302,13 +302,26 @@ async function loadFromGitHub(){
 
     const videoFile=introFiles.find(f=>isVid(f.name));
     if(videoFile){
+      const src=rawUrl(`images/Videointro/${videoFile.name}`);
       const wrap=document.getElementById('introVideoWrap');
+      const sect=document.getElementById('intro');
       if(wrap){
         wrap.dataset.state='loaded';
-        wrap.innerHTML=`<video controls playsinline preload="metadata"><source src="${rawUrl(`images/intro/${videoFile.name}`)}" type="${videoMime(videoFile.name)}"></video>`;
+        if(sect) sect.dataset.state='loaded';
+        wrap.innerHTML=`<video id="introVideo" controls playsinline preload="metadata"><source src="${src}" type="${videoMime(videoFile.name)}"></video>`;
+        const v=document.getElementById('introVideo');
+        // If the file can't be played (too large for raw.githubusercontent.com,
+        // LFS-tracked without raw access, codec problem, etc.) hide the section
+        // again instead of showing a broken player.
+        v.addEventListener('error',()=>{
+          console.warn('Intro-Video konnte nicht geladen werden:',src);
+          if(sect){sect.dataset.state='empty'}
+        },{capture:true});
+        v.querySelector('source').addEventListener('error',()=>{
+          console.warn('Intro-Video Quelle nicht erreichbar:',src);
+          if(sect){sect.dataset.state='empty'}
+        });
       }
-      const sect=document.getElementById('intro');
-      if(sect) sect.dataset.state='loaded';
     }
 
     // Häs photo (top frame) — from images/ueber-uns/

@@ -8,7 +8,7 @@
    ============================================================= */
 
 /* -------- Google Fonts (substitutions — see README "FONTS") --- */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Caveat:wght@500;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Caveat:wght@500;700&family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
   /* ---------- BRAND CORE (BLUE ONLY) -------------------------
@@ -70,8 +70,8 @@
   --border-strong:     var(--haes-navy);
 
   /* ---------- TYPE TOKENS ------------------------------------- */
-  --font-display:      'Cinzel Decorative', 'Cinzel', 'Trajan Pro', serif;
-  --font-display-clean:'Cinzel', 'Trajan Pro', serif;
+  --font-display:      'Oswald', 'Impact', 'Arial Narrow', sans-serif;
+  --font-display-clean:'Oswald', 'Impact', 'Arial Narrow', sans-serif;
   --font-serif:        'Spectral', 'Source Serif Pro', Georgia, serif;
   --font-hand:         'Caveat', 'Bradley Hand', cursive;
   --font-ui:           'Outfit', 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
@@ -97,7 +97,7 @@
   --tracking-tight:  -0.01em;
   --tracking-normal:  0;
   --tracking-wide:    0.04em;
-  --tracking-display: 0.06em;
+  --tracking-display: 0.02em;
   --tracking-eyebrow: 0.18em;
 
   /* ---------- SPACING (4px base) ------------------------------ */
@@ -164,7 +164,7 @@ html, body {
 
 h1, .h1 {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   font-size: var(--fs-4xl);
   line-height: var(--lh-tight);
   letter-spacing: var(--tracking-display);
@@ -174,7 +174,7 @@ h1, .h1 {
 }
 h2, .h2 {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   font-size: var(--fs-3xl);
   line-height: var(--lh-snug);
   letter-spacing: var(--tracking-display);
@@ -184,21 +184,22 @@ h2, .h2 {
 }
 h3, .h3 {
   font-family: var(--font-display-clean);
-  font-weight: 700;
+  font-weight: 600;
   font-size: var(--fs-2xl);
   line-height: var(--lh-snug);
-  letter-spacing: var(--tracking-wide);
+  letter-spacing: var(--tracking-display);
   color: var(--ink);
   text-transform: uppercase;
   margin: 0 0 var(--sp-4);
 }
 h4, .h4 {
   font-family: var(--font-display-clean);
-  font-weight: 600;
+  font-weight: 500;
   font-size: var(--fs-xl);
   line-height: var(--lh-snug);
   letter-spacing: var(--tracking-wide);
   color: var(--ink);
+  text-transform: uppercase;
   margin: 0 0 var(--sp-3);
 }
 h5, .h5 {

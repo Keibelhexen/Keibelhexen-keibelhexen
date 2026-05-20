@@ -90,8 +90,9 @@ function initConfetti(){
   const isMobile = innerWidth < 700 || matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Roughly 1 piece per 4vh of scroll height so it covers the whole page
   const pageVh = Math.max(100, document.documentElement.scrollHeight / innerHeight * 100);
-  const density = isMobile ? 0.18 : 0.36;          // pieces per vh
-  const N = Math.min(140, Math.round(pageVh * density));
+  // Reduced density so text remains easy to read
+  const density = isMobile ? 0.08 : 0.16;          // pieces per vh
+  const N = Math.min(70, Math.round(pageVh * density));
   const colors = ['#0E1230','#1B2247','#0A1466','#3C4F7C','#2C45A8','#0E1230','#1B2247','#F1ECDD'];
   // Only round + triangle (per request)
   const shapes = ['dot','tri','dot','tri','dot'];
@@ -306,6 +307,8 @@ async function loadFromGitHub(){
         wrap.dataset.state='loaded';
         wrap.innerHTML=`<video controls playsinline preload="metadata"><source src="${rawUrl(`images/intro/${videoFile.name}`)}" type="${videoMime(videoFile.name)}"></video>`;
       }
+      const sect=document.getElementById('intro');
+      if(sect) sect.dataset.state='loaded';
     }
 
     // Häs photo (top frame) — from images/ueber-uns/

@@ -7,6 +7,17 @@
 <title>Keibelhexen Huchenfeld · Schwäbisch-Alemannische Fasnet</title>
 <meta name="description" content="Die Keibelhexen aus Huchenfeld – Schwäbisch-Alemannische Fasnet, Häs, Larve und die Sage rund um Hugi, die Hexe aus dem Marterweibleswald.">
 
+<!-- Open Graph / WhatsApp / Facebook preview -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Keibelhexen Huchenfeld · Schwäbisch-Alemannische Fasnet">
+<meta property="og:description" content="Närrisch seit 2008. Die Sage von Hugi, das Häs, der Zirkel – und alle Termine der Saison.">
+<meta property="og:image" content="og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Keibelhexen Huchenfeld">
+<meta name="twitter:description" content="Närrisch seit 2008 – Keibel Gurruh!">
+<meta name="twitter:image" content="og-image.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
@@ -203,6 +214,17 @@
         <h4>Aschermittwoch</h4>
         <p>Hexenverbrennung – die Narren geben die Rathausherrschaft zurück.</p>
       </article>
+    </div>
+
+    <!-- Countdown -->
+    <div class="countdown rv" id="countdown" aria-live="polite">
+      <span class="cd-label" id="cdLabel">Noch bis zum nächsten Termin</span>
+      <div class="cd-blocks">
+        <div class="cd-block"><span class="cd-num" id="cdD">–</span><span class="cd-unit">Tage</span></div>
+        <div class="cd-block"><span class="cd-num" id="cdH">–</span><span class="cd-unit">Std</span></div>
+        <div class="cd-block"><span class="cd-num" id="cdM">–</span><span class="cd-unit">Min</span></div>
+        <div class="cd-block"><span class="cd-num" id="cdS">–</span><span class="cd-unit">Sek</span></div>
+      </div>
     </div>
 
     <div class="cal-wrap rv">
@@ -422,6 +444,7 @@
     <div class="fo-legal">
       <span>© 2026 Keibelhexen Huchenfeld</span>
       <span>Pforzheim · Baden-Württemberg</span>
+      <span><a href="#" onclick="openLegal('impressum');return false">Impressum</a> · <a href="#" onclick="openLegal('datenschutz');return false">Datenschutz</a></span>
     </div>
     <div class="fo-credit">
       Homepage kreiert, entwickelt und gestaltet von <strong>Manuel Rudorfer</strong>
@@ -443,6 +466,16 @@
 
 <!-- TWEAKS PANEL -->
 <div id="tweaks"></div>
+
+<!-- LEGAL MODAL -->
+<div class="legal-modal" id="legalModal" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
+  <div class="legal-backdrop" onclick="closeLegal()"></div>
+  <div class="legal-box">
+    <button class="legal-x" onclick="closeLegal()" aria-label="Schließen">✕</button>
+    <h2 id="legalTitle"></h2>
+    <div class="legal-body" id="legalBody"></div>
+  </div>
+</div>
 
 <script src="app.js"></script>
 </body>

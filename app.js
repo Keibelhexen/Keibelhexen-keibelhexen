@@ -75,6 +75,8 @@ window.addEventListener('DOMContentLoaded',()=>{
   loadFromGitHub();
   initTweaks();
   startQuiz();
+  initCountdown();
+  initLegal();
 });
 
 function injectSvgs(){
@@ -390,9 +392,8 @@ function renderGallery(){
   const s=document.getElementById('gastrip');
   if(!s) return;
   if(!dd.gallery.length){
-    s.innerHTML=`<div class="gi"><div class="giph">${SVG.cam}</div></div>
-                 <div class="gi"><div class="giph">${SVG.cam}</div></div>
-                 <div class="gi"><div class="giph">${SVG.cam}</div></div>`;
+    // Skeleton-Loader: pulsierende Platzhalter während die Bilder von GitHub kommen
+    s.innerHTML = Array.from({length:4}).map(()=>'<div class="gi skeleton"><div class="giph"></div></div>').join('');
     return;
   }
   s.innerHTML=dd.gallery.map((src,i)=>`
@@ -533,7 +534,135 @@ function initReveal(){
   setTimeout(()=>document.querySelectorAll('.rv').forEach(el=>el.classList.add('on')),1500);
 }
 
-// ─── Quiz ────────────────────────────────────
+// ─── Countdown zum nächsten Saison-Termin ────────────────────────────────────
+function initCountdown(){
+  const root=document.getElementById('countdown');
+  if(!root) return;
+  const dEl=document.getElementById('cdD'),
+        hEl=document.getElementById('cdH'),
+        mEl=document.getElementById('cdM'),
+        sEl=document.getElementById('cdS'),
+        lblEl=document.getElementById('cdLabel');
+
+  const LABELS = {
+    elf:'Bis Hugi erwacht',
+    schmotz:'Bis zum Rathaussturm',
+    ash:'Bis zur Hexenverbrennung'
+  };
+
+  function tick(){
+    const now=new Date();
+    const s=currentSeason(now);
+    // Pick next upcoming event in season
+    const candidates=[
+      {key:'elf',     d:s.elf},
+      {key:'schmotz', d:s.schmotz},
+      {key:'ash',     d:s.ash}
+    ].filter(c=>c.d>now).sort((a,b)=>a.d-b.d);
+
+    if(!candidates.length){
+      // Falls Saison vorbei — currentSeason() switcht eigentlich automatisch,
+      // aber als Fallback anzeigen, dass die nächste Saison kommt
+      lblEl.textContent='Saison läuft';
+      [dEl,hEl,mEl,sEl].forEach(el=>el.textContent='–');
+      return;
+    }
+    const next=candidates[0];
+    const diff=next.d - now;
+    if(diff<=0){
+      root.classList.add('is-event');
+      lblEl.textContent='Heute ist es so weit!';
+      [dEl,hEl,mEl,sEl].forEach(el=>el.textContent='0');
+      return;
+    }
+    root.classList.remove('is-event');
+    lblEl.textContent=LABELS[next.key];
+    const days =Math.floor(diff/86400000);
+    const hours=Math.floor((diff%86400000)/3600000);
+    const mins =Math.floor((diff%3600000)/60000);
+    const secs =Math.floor((diff%60000)/1000);
+    dEl.textContent=days;
+    hEl.textContent=String(hours).padStart(2,'0');
+    mEl.textContent=String(mins).padStart(2,'0');
+    sEl.textContent=String(secs).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick,1000);
+}
+
+// ─── Impressum & Datenschutz (Modal) ────────────────────────────────────
+const LEGAL_CONTENT = {
+  impressum: {
+    title:'Impressum',
+    html:`
+      <p>Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz):</p>
+      <h3>Anbieter</h3>
+      <p><strong>Keibelhexen Huchenfeld GbR</strong><br>
+      Huchenfeld<br>
+      75181 Pforzheim<br>
+      Deutschland</p>
+
+      <h3>Vertreten durch</h3>
+      <p>Die vertretungsberechtigten Gesellschafter*innen der GbR.</p>
+
+      <h3>Kontakt</h3>
+      <p>E-Mail: <a href="mailto:keibelhexen@gmx.de">keibelhexen@gmx.de</a><br>
+      Instagram: <a href="https://www.instagram.com/keibelhexen" target="_blank" rel="noopener">@keibelhexen</a></p>
+
+      <h3>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
+      <p>Keibelhexen Huchenfeld GbR, Anschrift wie oben.</p>
+
+      <h3>Haftungshinweis</h3>
+      <p>Trotz sorgfältiger inhaltlicher Kontrolle übernehmen wir keine Haftung für die Inhalte externer Links. Für den Inhalt verlinkter Seiten sind ausschließlich deren Betreiber verantwortlich.</p>
+    `
+  },
+  datenschutz: {
+    title:'Datenschutzerklärung',
+    html:`
+      <p>Wir freuen uns über deinen Besuch. Hier in Kürze, welche Daten wir verarbeiten.</p>
+
+      <h3>Verantwortlich</h3>
+      <p>Keibelhexen Huchenfeld GbR, Huchenfeld, 75181 Pforzheim, E-Mail: <a href="mailto:keibelhexen@gmx.de">keibelhexen@gmx.de</a></p>
+
+      <h3>Hosting (GitHub Pages)</h3>
+      <p>Diese Website wird über <strong>GitHub Pages</strong> (GitHub, Inc., USA) bereitgestellt. Beim Aufruf werden technisch notwendige Daten (z. B. IP-Adresse, Browser, Zeitpunkt) verarbeitet. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+
+      <h3>Kontaktformular</h3>
+      <p>Das Formular wird über den Dienst <strong>FormSubmit</strong> (formsubmit.co) an unsere E-Mail-Adresse weitergeleitet. Übertragen werden Name, E-Mail, Betreff und deine Nachricht – ausschließlich zur Beantwortung deiner Anfrage. Rechtsgrundlage: Art. 6 Abs. 1 lit. b/f DSGVO.</p>
+
+      <h3>Eingebettete Inhalte</h3>
+      <p>Wir binden einen <strong>Google Kalender</strong> ein, um Termine anzuzeigen. Beim Laden kann Google personenbezogene Daten verarbeiten. Bilder und Video werden direkt aus unserem <strong>GitHub-Repository</strong> geladen.</p>
+
+      <h3>Deine Rechte</h3>
+      <p>Du hast jederzeit das Recht auf Auskunft, Berichtigung, Löschung und Widerspruch gegenüber der Verarbeitung deiner Daten. Wende dich dazu an <a href="mailto:keibelhexen@gmx.de">keibelhexen@gmx.de</a>.</p>
+
+      <h3>Cookies</h3>
+      <p>Diese Website setzt selbst keine Cookies. Eingebettete Drittanbieter (Google Kalender) können dies tun.</p>
+    `
+  }
+};
+
+function openLegal(which){
+  const m=document.getElementById('legalModal');
+  if(!m) return;
+  const c=LEGAL_CONTENT[which];
+  if(!c) return;
+  document.getElementById('legalTitle').textContent=c.title;
+  document.getElementById('legalBody').innerHTML=c.html;
+  m.classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeLegal(){
+  const m=document.getElementById('legalModal');
+  if(!m) return;
+  m.classList.remove('on');
+  document.body.style.overflow='';
+}
+function initLegal(){
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape' && document.getElementById('legalModal')?.classList.contains('on')) closeLegal();
+  });
+}
 const QUIZ_POOL = [
   {q:'Wann findet bei uns der Rathaussturm statt?',         r:'Schmotziger Donnerstag', w:'Rosenmontag'},
   {q:'Wann wurden die Keibelhexen mit ihrem Häs gegründet?',r:'2008',                   w:'1998'},
@@ -546,7 +675,16 @@ const QUIZ_POOL = [
   {q:'Wie heißt der Ruf der Keibelhexen?',                  r:'Keibel Gurruh',          w:'Hexen Hopp'},
   {q:'Was ist ursprünglich ein „Keibel"?',                  r:'Eine Taube',             w:'Ein Besen'},
   {q:'Was ist die Hauptfarbe des Häs?',                     r:'Blau',                   w:'Grün'},
-  {q:'Wer sind die „schenschde Hexe\' uff derre Welt"?',    r:"Keibelhexe' aus Huche'feld", w:"Lumpenhexe' aus Pforzheim"}
+  {q:'Wer sind die „schenschde Hexe\' uff derre Welt"?',    r:"Keibelhexe' aus Huche'feld", w:"Lumpenhexe' aus Pforzheim"},
+  {q:'Welcher Stadtteil von Pforzheim ist unser Zuhause?',  r:'Huchenfeld',             w:'Eutingen'},
+  {q:'Wer wird beim Rathaussturm „entführt"?',              r:'Die Ortsvorsteherin',    w:'Der Bürgermeister'},
+  {q:'Welche Tradition lebt unsere Fasnet?',                r:'Schwäbisch-alemannische',w:'Rheinische'},
+  {q:'In welchem Wald hat Hugi nach ihrer Verbannung gelebt?', r:'Marterweibleswald',   w:'Hagenschießwald'},
+  {q:'Wer hat Hugi der Hexerei beschuldigt?',               r:'Bauer Cuntz',            w:'Pfarrer Müller'},
+  {q:'Was hat Hugi für den kranken Ochsen mitgebracht?',    r:'Wildkräuter',            w:'Weihwasser'},
+  {q:'Womit wälzt sich Hugi bei Vollmond?',                 r:'Im Schlamm und Taubenfedern', w:'Im Schnee und Tannennadeln'},
+  {q:'Was ist das auffälligste Merkmal der Larve?',         r:'Der lange Schnabel',     w:'Die rote Nase'},
+  {q:'Bis wann haben die Narren die Rathausherrschaft?',    r:'Bis Aschermittwoch',     w:'Bis Faschingsdienstag'}
 ];
 
 const RIGHT_FEEDBACK = [
@@ -777,4 +915,4 @@ function initTweaks(){
 }
 
 // Expose for inline handlers
-Object.assign(window,{tmenu,sendMail,openLbSet,closeLb,lbMove,lbGo,gaScroll,setTweak,closeTweaks,openTweaks,startQuiz,answerQuiz});
+Object.assign(window,{tmenu,sendMail,openLbSet,closeLb,lbMove,lbGo,gaScroll,setTweak,closeTweaks,openTweaks,startQuiz,answerQuiz,openLegal,closeLegal});

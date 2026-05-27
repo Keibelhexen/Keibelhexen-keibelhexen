@@ -5,7 +5,7 @@
 const GH_USER   = 'Keibelhexen';
 const GH_REPO   = 'Keibelhexen-keibelhexen';
 const GH_BRANCH = 'main';
-const INSTA     = 'keibelhexen_huchenfeld';
+const INSTA     = 'keibelhexen';
 
 const ZIRKEL = [
   {name:'Manuel', role:'Ober-Hexe'},
@@ -74,6 +74,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   applyManifest();
   loadFromGitHub();
   initTweaks();
+  startQuiz();
 });
 
 function injectSvgs(){
@@ -532,14 +533,140 @@ function initReveal(){
   setTimeout(()=>document.querySelectorAll('.rv').forEach(el=>el.classList.add('on')),1500);
 }
 
-// ─── Kontakt ────────────────────────────────────
-function sendMail(){
+// ─── Quiz ────────────────────────────────────
+const QUIZ_POOL = [
+  {q:'Wann findet bei uns der Rathaussturm statt?',         r:'Schmotziger Donnerstag', w:'Rosenmontag'},
+  {q:'Wann wurden die Keibelhexen mit ihrem Häs gegründet?',r:'2008',                   w:'1998'},
+  {q:'Wie heißt die Gruppe, die die Hexen repräsentiert?',  r:'Der Zirkel',             w:'Der Hexenrat'},
+  {q:'Wie heißt die klassische Verkleidung der Hexen?',     r:'Häs',                    w:'Kittel'},
+  {q:'Aus welchem Material ist die Larve (Maske)?',         r:'Holz',                   w:'Pappmaché'},
+  {q:'Wann erwacht die Keibelhexe?',                        r:'11.11.',                 w:'1. Januar'},
+  {q:'Wann endet die Fasnet?',                              r:'Aschermittwoch',         w:'Karfreitag'},
+  {q:'Wie hieß die Hexe, der die Keibelhexen ihren Namen verdanken?', r:'Hugi',         w:'Walpurga'},
+  {q:'Wie heißt der Ruf der Keibelhexen?',                  r:'Keibel Gurruh',          w:'Hexen Hopp'},
+  {q:'Was ist ursprünglich ein „Keibel"?',                  r:'Eine Taube',             w:'Ein Besen'},
+  {q:'Was ist die Hauptfarbe des Häs?',                     r:'Blau',                   w:'Grün'},
+  {q:'Wer sind die „schenschde Hexe\' uff derre Welt"?',    r:"Keibelhexe' aus Huche'feld", w:"Lumpenhexe' aus Pforzheim"}
+];
+
+const RIGHT_FEEDBACK = [
+  'Genau richtig – das sitzt!',
+  'Stimmt – du kennst dich aus!',
+  'Volltreffer, Keibel Gurruh!'
+];
+const WRONG_HINT = 'Überleg es dir nochmal – das passt noch nicht.';
+
+let quizState = null;
+
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function startQuiz(){
+  const picks = shuffle(QUIZ_POOL).slice(0,3).map(item=>{
+    const opts = Math.random()<0.5 ? [item.r,item.w] : [item.w,item.r];
+    return {q:item.q, r:item.r, opts};
+  });
+  quizState = {questions:picks, idx:0, done:false};
+  renderQuiz();
+}
+
+function renderQuiz(){
+  const card=document.getElementById('quizCard');
+  if(!card||!quizState) return;
+  const total=quizState.questions.length;
+  if(quizState.done){
+    card.innerHTML=`<div class="quiz-final">
+      <div class="ms-icon" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 6l7 14 16 2-11.5 11 3 16L32 41l-14.5 8 3-16L9 22l16-2z"/>
+        </svg>
+      </div>
+      <h3>Wir sind stolz auf dich!</h3>
+      <p>Drei von drei – du bist fast schon eine echte Keibelhexe. Hugi würde grinsen.</p>
+      <p class="schlachtruf">Keibel Gurruh!</p>
+      <button class="quiz-retry" onclick="startQuiz()">Nochmal spielen</button>
+    </div>`;
+    return;
+  }
+  const cur=quizState.questions[quizState.idx];
+  const pct=Math.round(quizState.idx/total*100);
+  card.innerHTML=`
+    <div class="quiz-progress">
+      <span>Frage ${quizState.idx+1} / ${total}</span>
+      <div class="qp-bar"><div class="qp-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="quiz-question">${cur.q}</div>
+    <div class="quiz-options">
+      ${cur.opts.map((o,i)=>`<button class="quiz-opt" data-opt="${i}" onclick="answerQuiz(${i})">${o}</button>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="quizFeedback"></div>`;
+}
+
+function answerQuiz(i){
+  if(!quizState) return;
+  const cur=quizState.questions[quizState.idx];
+  const chosen=cur.opts[i];
+  const btns=document.querySelectorAll('.quiz-opt');
+  const fb=document.getElementById('quizFeedback');
+  if(chosen===cur.r){
+    btns.forEach((b,bi)=>{b.disabled=true;if(bi===i)b.classList.add('right')});
+    if(fb){fb.className='quiz-feedback right';fb.textContent=RIGHT_FEEDBACK[Math.floor(Math.random()*RIGHT_FEEDBACK.length)]}
+    setTimeout(()=>{
+      quizState.idx++;
+      if(quizState.idx>=quizState.questions.length) quizState.done=true;
+      renderQuiz();
+    },950);
+  }else{
+    btns[i].classList.add('wrong');
+    setTimeout(()=>btns[i].classList.remove('wrong'),700);
+    btns[i].disabled=true;
+    if(fb){fb.className='quiz-feedback wrong';fb.textContent=WRONG_HINT}
+  }
+}
+async function sendMail(){
   const n=document.getElementById('fN').value.trim(),
         e=document.getElementById('fE').value.trim(),
         s=document.getElementById('fS').value.trim(),
         m=document.getElementById('fM').value.trim();
   if(!n||!e||!m){toast('Bitte Name, E-Mail & Nachricht ausfüllen');return}
-  window.open(`mailto:keibelhexen@gmx.de?subject=${encodeURIComponent((s||'Kontakt')+' – '+n)}&body=${encodeURIComponent('Name: '+n+'\nE-Mail: '+e+'\n\n'+m)}`);
+  const btn=document.querySelector('.kof .btn');
+  const origLabel=btn?btn.textContent:'';
+  if(btn){btn.disabled=true;btn.textContent='Wird gesendet…'}
+  try{
+    const res=await fetch('https://formsubmit.co/ajax/keibelhexen@gmx.de',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        Name:n,
+        Email:e,
+        Betreff:s||'Kontakt über Website',
+        Nachricht:m,
+        _subject:`Website-Kontakt – ${s||n}`,
+        _template:'table',
+        _captcha:'false'
+      })
+    });
+    if(!res.ok) throw new Error('Status '+res.status);
+    showMailSuccess();
+  }catch(err){
+    console.warn('Mail-Fehler:',err);
+    if(btn){btn.disabled=false;btn.textContent=origLabel}
+    toast('Versand fehlgeschlagen – bitte erneut versuchen oder direkt an keibelhexen@gmx.de schreiben.');
+  }
+}
+
+function showMailSuccess(){
+  const form=document.querySelector('.kof');
+  if(!form) return;
+  form.innerHTML=`<div class="mail-success">
+    <div class="ms-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="28"/><path d="M20 33l8 8 16-18"/>
+      </svg>
+    </div>
+    <h3>Danke für deine Nachricht!</h3>
+    <p>Sie ist erfolgreich versendet worden – wir melden uns so bald wie möglich bei dir.</p>
+    <p class="schlachtruf" style="font-size:28px;margin-top:18px">Keibel Gurruh!</p>
+  </div>`;
 }
 function toast(msg){
   const t=document.createElement('div');t.className='toast';t.textContent=msg;
@@ -650,4 +777,4 @@ function initTweaks(){
 }
 
 // Expose for inline handlers
-Object.assign(window,{tmenu,sendMail,openLbSet,closeLb,lbMove,lbGo,gaScroll,setTweak,closeTweaks,openTweaks});
+Object.assign(window,{tmenu,sendMail,openLbSet,closeLb,lbMove,lbGo,gaScroll,setTweak,closeTweaks,openTweaks,startQuiz,answerQuiz});
